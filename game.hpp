@@ -10,7 +10,7 @@ private:
     Cursor *cursor;
     Grid *grid;
     sf::RenderWindow *window;
-    bool running;
+    bool running; 
     int interval;
 public:
     Game();
@@ -21,7 +21,7 @@ public:
     void display() const;
     void pause();
     void init();
-    void loadFile(std::string path);
+    void loadFile(const std::string path);
     void invertCell(sf::Vector2i coordinates) const;
     void setConstantCell(sf::Vector2i coordinates) const;
 };

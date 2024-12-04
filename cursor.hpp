@@ -4,6 +4,8 @@
 #ifndef CURSOR_HPP
 #define CURSOR_HPP
 
+class Game;
+
 class Cursor {
     private:
     int x; // Position X du curseur
@@ -16,7 +18,7 @@ class Cursor {
 
     sf::Vector2i getPosition() const; // Retourne la position actuelle
 
-    void clic(const sf::Event* event);
+    void clic(const sf::Event* event, Game* game);
 
     void updatePosition(int x , int y);
 };

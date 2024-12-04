@@ -5,9 +5,11 @@
 #include <SFML/Graphics.hpp>
 #include "cell.hpp"
 
+class Cell;
+
 class Grid {
 private:
-    std::list<Cell*> elements;       // Liste contenant toutes les cellules
+    std::vector<std::vector<Cell*>> elements;       // Liste contenant toutes les cellules
     int width;                       // Largeur de la grille
     int height;                      // Hauteur de la grille
     sf::Sprite deadCellSprite;       // Sprite pour les cellules mortes
@@ -22,12 +24,15 @@ public:
     ~Grid();
 
     // Méthodes principales
-    std::list<Cell*> getNeighbours(Cell* element); // Obtenir les voisins
+    void clear();
+    void addLine(std::vector<Cell*>);
+    std::vector<Cell*> getNeighbours(Cell* element); // Obtenir les voisins
     void nextGen();                                // Calculer la prochaine itération
     void display(sf::RenderWindow* window);        // Afficher la grille (mode graphique)
     void invertCell(int x, int y);                 // Inverser l'état d'une cellule
     void setConstant(int x, int y);                // Définir une cellule comme constante
     void resizeSprites(int cellWidth, int cellHeight); // Redimensionner les sprites
+    sf::Vector2i getSpriteBounds();
 
     // Accesseur pour la itération actuelle
     static int getGenNumber();

@@ -1,10 +1,12 @@
 #include "game.hpp"
+#include <SFML/Window/Keyboard.hpp>
 #include <iostream>
+#include <fstream>
 #include <cmath>
 Game::Game()
 {
     window = new sf::RenderWindow();
-    grid = new Grid();
+    grid = new Grid(0,0);
     cursor = new Cursor();
 }
 
@@ -35,12 +37,12 @@ void Game::setMode()
         std::cin >> choice;
         if (std::find(g.begin(), g.end(), choice) != g.end())
         {
-            this.graphic();
+            this->graphic();
             break;
         } 
         else if (std::find(c.begin(), c.end(), choice) != c.end())
         {
-            this.console();
+            this->console();
             break;
         }
     }
@@ -64,24 +66,22 @@ void Game::graphic()
                     window->close();
                     break;
                 case sf::Event::Resized:
-                    this.resizeWindow(window->getSize().x,window->getSize().y);
+                    this->resizeWindow(window->getSize().x,window->getSize().y);
                     break;
                 case sf::Event::MouseButtonPressed:
-                    cursor->clic(event);
+                    cursor->clic(&event, this);
                     break;
                 case sf::Event::MouseMoved:
                     cursor->updatePosition(event.mouseMove.x, event.mouseMove.y);
                     break;
                 case sf::Event::KeyPressed:
-                    switch(event.key.scancode)  
+                    switch(event.key.code)  
                     {
-                        case sf::Keyboard::Scan::Escape:
-                            this.pause();
-                            this.blurBackground();
-                            this.pausemenu();
+                        case sf::Keyboard::Escape:
+                            this->pause();
                             break;
-                        case sf::Keyboard::Scan::Space:
-                            this.pause();
+                        case sf::Keyboard::Space:
+                            this->pause();
                             break;
                     }
                     break;
@@ -96,7 +96,7 @@ void Game::graphic()
 
 void Game::display() const
 {
-    grid->display();
+    grid->display(window);
 }
 
 void Game::pause()
@@ -109,17 +109,38 @@ void Game::init()
     std::string path;
     std::cout << "Indiquer le chemin d'accès du fichier: ";
     std::cin >> path;
-    this.loadFile(path);
-    this.setMode();
-}
-
-void Game::loadFile(std::string path)
-{  
-   
+    this->loadFile(path);
+    this->setMode();
 }
 
 void Game::invertCell(sf::Vector2i coordinates) const
 {
     sf::Vector2i shapeBounds = grid->getSpriteBounds();
     grid->invertCell(floor(coordinates.x / shapeBounds.x),floor(coordinates.y / shapeBounds.y));
+}
+
+void Game::loadFile(const std::string filename){
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "Erreur : Impossible d'ouvrir " << filename << std::endl;
+    }
+
+    grid->clear(); // Vide la grille 
+    int x , y;
+    for (std::string line; std::getline(file, line); ){
+        std::vector<Cell*> row;
+        for (char c : line)
+           if (c == '0')
+            {
+                row.push_back(new Alive_Cell(x, y));
+                x++;
+            }
+            else if (c == '1')
+            {
+                row.push_back(new Dead_Cell(x, y));
+                x++;
+            }
+        y++;
+        if (!row.empty()) grid->addLine(row);    //si ligne valide(contient data) alors ajout ligne a la grille 
+    }
 }

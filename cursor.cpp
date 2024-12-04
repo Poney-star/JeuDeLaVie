@@ -16,9 +16,9 @@ sf::Vector2i Cursor::getPosition() const {
 void Cursor::clic(const sf::Event* event, Game* game) {
 
         if (event->mouseButton.button == sf::Mouse::Left) { // Si clic gauche
-            game->invertCell(this.getPosition()); // Appelle invertCell avec la position actuelle du curseur
+            game->invertCell(this->getPosition()); // Appelle invertCell avec la position actuelle du curseur
         } else if (event->mouseButton.button == sf::Mouse::Right) { // Si clic droit
-            game->setConstant(this.getPosition()); // Appelle setConstant avec la position actuelle du curseur
+            game->setConstantCell(this->getPosition()); // Appelle setConstant avec la position actuelle du curseur
         }
 }
 

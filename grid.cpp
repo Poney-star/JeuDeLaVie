@@ -5,13 +5,16 @@ int Grid::genNumber = 0;
 
 // Destructeur
 Grid::~Grid() {
-    for (Cell* cell : elements) {
-        delete cell; // Libération de la mémoire de chaque cellule
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            delete cell; // Libération de la mémoire de chaque cellule
+        }
     }
 }
 
 // Méthode pour récupérer les voisins d'une cellule
-std::list<Cell*> Grid::getNeighbours(Cell* element) {
+/*std::list<Cell*> Grid::getNeighbours(Cell* element) {
     std::list<Cell*> neighbours;
     int x = element->getX();
     int y = element->getY();
@@ -35,64 +38,79 @@ std::list<Cell*> Grid::getNeighbours(Cell* element) {
         }
     }
     return neighbours;
-}
+}*/
 
 // Méthode pour calculer l'itération suivante
 void Grid::nextGen() {
-    for (Cell* cell : elements) {
-        if (!cell->isConst()) { // Ne pas mettre à jour les cellules constantes
-            cell->update();
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            if (!cell->isConst()) { // Ne pas mettre à jour les cellules constantes
+                cell->update(this);
+            }
         }
     }
     ++genNumber;
 }
-
+void Grid::clear()
+{
+    elements = {{}};
+}
 // Méthode pour afficher la grille (mode graphique) ?????????
 void Grid::display(sf::RenderWindow* window) {
-    for (Cell* cell : elements) {
-        sf::Sprite sprite;
-        if (cell->isAlive()) {  // Si la cellule est vivante
-            // Choisir le sprite en fonction de l'état de la cellule (vivante ou constante)
-            sprite = cell->isConst() ? constAliveCellSprite : aliveCellSprite;
-        } else {  // Si la cellule est morte
-            // Choisir le sprite pour la cellule morte
-            sprite = cell->isConst() ? constDeadCellSprite : deadCellSprite;
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            sf::Sprite sprite;
+            if (cell->isConst()) {  // Si la cellule est vivante
+                // Choisir le sprite en fonction de l'état de la cellule (vivante ou constante)
+                sprite = cell->isConst() ? constAliveCellSprite : aliveCellSprite;
+            } else {  // Si la cellule est morte
+                // Choisir le sprite pour la cellule morte
+                sprite = cell->isConst() ? constDeadCellSprite : deadCellSprite;
+            }
+            // Placer le sprite à la position appropriée de la cellule
+            sprite.setPosition(cell->getX() * sprite.getLocalBounds().width,
+                            cell->getY() * sprite.getLocalBounds().height);
+            window->draw(sprite);  // Dessiner le sprite sur la fenêtre
         }
-        // Placer le sprite à la position appropriée de la cellule
-        sprite.setPosition(cell->getX() * sprite.getLocalBounds().width,
-                           cell->getY() * sprite.getLocalBounds().height);
-        window->draw(sprite);  // Dessiner le sprite sur la fenêtre
     }
 }
 
 // Méthode pour inverser l'état d'une cellule (vivant/mort)
 void Grid::invertCell(int x, int y) {
-    for (Cell* cell : elements) {
-        if (cell->getX() == x && cell->getY() == y) {
-            if (cell->isAlive()) {
-                delete cell;
-                cell = new Dead_Cell(x, y);
-            } else {
-                delete cell;
-                cell = new Alive_Cell(x, y);
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            if (cell->getX() == x && cell->getY() == y) {
+                if (cell->isConst()) {
+                    delete cell;
+                    cell = new Dead_Cell(x, y);
+                } else {
+                    delete cell;
+                    cell = new Alive_Cell(x, y);
+                }
+                break;
             }
-            break;
         }
     }
 }
 
 // Méthode pour définir une cellule comme constante
 void Grid::setConstant(int x, int y) {
-    for (Cell* cell : elements) {
-        if (cell->getX() == x && cell->getY() == y) {
-            cell->setConst();  // Marquer la cellule comme constante
-            break;
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            if (cell->getX() == x && cell->getY() == y) {
+                cell->setConst();  // Marquer la cellule comme constante
+                break;
+            }
         }
     }
 }
 
 // Méthode pour redimensionner les sprites !!!!!!!!!!!
-void Grid::resizeSprites(float cellWidth, float cellHeight) {
+void Grid::resizeSprites(int cellWidth, int cellHeight) {
     deadCellSprite.setScale(cellWidth / deadCellSprite.getLocalBounds().width,
                             cellHeight / deadCellSprite.getLocalBounds().height);
     aliveCellSprite.setScale(cellWidth / aliveCellSprite.getLocalBounds().width,
