@@ -10,8 +10,9 @@ private:
     Cursor *cursor;
     Grid *grid;
     sf::RenderWindow *window;
-    bool running; 
+    bool running;
     int interval;
+    int genMax;
 public:
     Game();
     void resizeWindow(int width, int height) const;

@@ -4,7 +4,8 @@
 int Grid::genNumber = 0;
 
 // Destructeur
-Grid::~Grid() {
+Grid::~Grid()
+{
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
@@ -41,7 +42,8 @@ Grid::~Grid() {
 }*/
 
 // Méthode pour calculer l'itération suivante
-void Grid::nextGen() {
+void Grid::nextGen()
+{
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
@@ -57,7 +59,8 @@ void Grid::clear()
     elements = {{}};
 }
 // Méthode pour afficher la grille (mode graphique) ?????????
-void Grid::display(sf::RenderWindow* window) {
+void Grid::display(sf::RenderWindow* window)
+{
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
@@ -77,27 +80,15 @@ void Grid::display(sf::RenderWindow* window) {
     }
 }
 
-// Méthode pour inverser l'état d'une cellule (vivant/mort)
-void Grid::invertCell(int x, int y) {
-    for (std::vector<Cell*> row : elements)
-    {
-        for (Cell* cell : row) {
-            if (cell->getX() == x && cell->getY() == y) {
-                if (cell->isConst()) {
-                    delete cell;
-                    cell = new Dead_Cell(x, y);
-                } else {
-                    delete cell;
-                    cell = new Alive_Cell(x, y);
-                }
-                break;
-            }
-        }
-    }
+// Méthode pour inverser l'état d'une cellule (vivant/mort)!!!!!!!!!!!!!!!!!!
+void Grid::invertCell(int x, int y)
+{
+    
 }
 
 // Méthode pour définir une cellule comme constante
-void Grid::setConstant(int x, int y) {
+void Grid::setConstant(int x, int y)
+{
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
@@ -110,7 +101,8 @@ void Grid::setConstant(int x, int y) {
 }
 
 // Méthode pour redimensionner les sprites !!!!!!!!!!!
-void Grid::resizeSprites(int cellWidth, int cellHeight) {
+void Grid::resizeSprites(int cellWidth, int cellHeight)
+{
     deadCellSprite.setScale(cellWidth / deadCellSprite.getLocalBounds().width,
                             cellHeight / deadCellSprite.getLocalBounds().height);
     aliveCellSprite.setScale(cellWidth / aliveCellSprite.getLocalBounds().width,
@@ -122,6 +114,22 @@ void Grid::resizeSprites(int cellWidth, int cellHeight) {
 }
 
 // Accesseur pour l'itération actuelle
-int Grid::getGenNumber() {
+int Grid::getGenNumber()
+{
     return genNumber;
+}
+
+int Grid::getHeight() const
+{
+    return height;
+}
+
+std::vector<int> Grid::getLine(int lineNumber) 
+{
+    std::vector<int> line;
+    for (Cell* cell : elements[lineNumber])
+    {
+        line.push_back((typeid(*cell) == typeid(Alive_Cell))? 1 : 0);
+    }
+    return line;
 }

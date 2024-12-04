@@ -50,7 +50,23 @@ void Game::setMode()
 
 void Game::console()
 {
-
+    while(grid->getGenNumber() < genMax)
+    {
+        std::ofstream outputFile("Grille_Generation_Numero_"+std::to_string(grid->getGenNumber())+"_out.txt");
+        std::string intConcatenated;
+        if (outputFile.is_open())
+        {
+            for(int line; line < grid->getHeight(); line++)
+            {
+            intConcatenated = "";
+            for (int nb : grid->getLine(grid->getGenNumber()))
+            {
+                intConcatenated += std::to_string(nb);
+            }
+            outputFile <<  + "\n";
+            }
+        }
+    }
 }
 
 void Game::graphic()
