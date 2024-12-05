@@ -1,4 +1,5 @@
 #include "cell.hpp"
+#include <iostream>
 
 void Cell::setConst(){
     constant = !constant;
@@ -22,6 +23,12 @@ Cell::Cell(){
     constant = false;
     neighbours = sf::Vector2i(0, 0);
 }
+
+void Cell::setNeighbours(sf::Vector2i neighbours)
+{
+    this->neighbours = neighbours;
+}
+
 void Alive_Cell:: update(Grid *grid) {
     if(!(neighbours.x != 2 && neighbours.x != 3))
     {

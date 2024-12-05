@@ -2,7 +2,7 @@ CC = g++
 
 CFLAGS =
 
-TARGET = app
+TARGET = app.exe
 
 SRC = main.cpp cell.cpp cursor.cpp game.cpp grid.cpp
 

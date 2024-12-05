@@ -1,4 +1,5 @@
 #include "grid.hpp"
+#include <iostream>
 
 // Initialisation du membre statique
 int Grid::genNumber = 0;
@@ -22,31 +23,20 @@ Grid::~Grid()
 }
 
 // Méthode pour récupérer les voisins d'une cellule
-/*std::list<Cell*> Grid::getNeighbours(Cell* element) {
-    std::list<Cell*> neighbours;
+sf::Vector2i Grid::getNeighbours(Cell* element) {
+    sf::Vector2i neighbours(0, 0);
     int x = element->getX();
     int y = element->getY();
-
-    // Parcourir les 8 voisins
-    for (int dy = -1; dy <= 1; ++dy) {
-        for (int dx = -1; dx <= 1; ++dx) {
-            if (dx == 0 && dy == 0) continue; // Ignorer la cellule elle-même
-
-            int nx = x + dx;
-            int ny = y + dy;
-
-            // Vérifier si les coordonnées sont dans la grille
-            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                for (Cell* cell : elements) {
-                    if (cell->getX() == nx && cell->getY() == ny) {
-                        neighbours.push_back(cell);  // Ajouter le voisin à la liste
-                    }
-                }
-            }
-        }
-    }
+    (typeid(*elements[y - 1 < 0 ? height - 1 : y - 1][x - 1 < 0 ? width - 1 : x -  1]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[y][x - 1 < 0 ? width - 1 : x -  1]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[(y+1)%height][x - 1 < 0 ? width - 1 : x -  1]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[y - 1 < 0 ? height - 1 : y - 1][x]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[(y+1)%height][x]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[y - 1 < 0 ? height - 1: y - 1][(x+1)%width]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[y][(x+1)%width]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
+    (typeid(*elements[(y+1)%height][(x+1)%width]) == typeid(Alive_Cell)) ? neighbours.x += 1 : neighbours.y += 1;
     return neighbours;
-}*/
+}
 
 // Méthode pour calculer l'itération suivante
 void Grid::nextGen()
@@ -54,16 +44,22 @@ void Grid::nextGen()
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
-            if (!cell->isConst()) { // Ne pas mettre à jour les cellules constantes
+            if (!cell->isConst()) {
                 cell->update(this);
             }
+        }
+    }
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            cell->setNeighbours(this->getNeighbours(cell));
         }
     }
     ++genNumber;
 }
 void Grid::clear()
 {
-    elements = {{}};
+    elements = {};
 }
 // Méthode pour afficher la grille (mode graphique) ?????????
 void Grid::display(sf::RenderWindow* window)
@@ -87,10 +83,16 @@ void Grid::display(sf::RenderWindow* window)
     }
 }
 
-// Méthode pour inverser l'état d'une cellule (vivant/mort)!!!!!!!!!!!!!!!!!!
+// Méthode pour inverser l'état d'une cellule (vivant/mort)
 void Grid::invertCell(int x, int y)
 {
-    
+    Cell* toDelete = elements[y][x];
+    if (typeid(*elements[y][x]) == typeid(Alive_Cell)){
+        elements[y][x] = new Dead_Cell(x, y);
+    } else {
+        elements[y][x] = new Alive_Cell(x, y);
+    }
+    delete toDelete;
 }
 
 // Méthode pour définir une cellule comme constante
@@ -131,6 +133,15 @@ int Grid::getHeight() const
     return height;
 }
 
+void Grid::endInit()
+{
+    for (std::vector<Cell*> row : elements)
+    {
+        for (Cell* cell : row) {
+            cell->setNeighbours(this->getNeighbours(cell));
+        }
+    }
+}
 std::vector<int> Grid::getLine(int lineNumber) 
 {
     std::vector<int> line;
@@ -149,4 +160,10 @@ sf::Vector2i Grid::getSpriteBounds()
 void Grid::addLine(std::vector<Cell*> line)
 {
     elements.push_back(line);
+}
+
+void Grid::setSize(int width, int height)
+{
+    this->width = width;
+    this->height = height;
 }

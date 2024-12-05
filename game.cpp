@@ -1,8 +1,10 @@
 #include "game.hpp"
 #include <SFML/Window/Keyboard.hpp>
-#include <iostream>
 #include <fstream>
 #include <cmath>
+#include <thread>
+#include <chrono>
+
 Game::Game()
 {
     window = new sf::RenderWindow();
@@ -19,18 +21,8 @@ void Game::resizeWindow(int width, int height) const
 void Game::setMode()
 {
     std::string choice;
-    /*int gridWidth;
-    int gridHeight;*/
     const std::vector<std::string> g = {"g","G","GRAPHIQUE","graphique"};
     const std::vector<std::string> c = {"c","C","CONSOLE","console"};
-    // Dans le cas d'une taille non fixée par le fichier :
-    /* 
-    std::cout << "Indiquer la hauteur de la grille:" << std::endl;
-    std::cin >> gridHeight;
-    std::cout << "Indiquer la largeur de la grille:" << std::endl;
-    std::cin >> gridWidth;
-    grid -> setSize(gridWidth, gridHeight);
-    */
     while(1)
     {
         std::cout << "Indiquer le mode (graphique/console): "<< std::endl;
@@ -56,22 +48,23 @@ void Game::setConstantCell(sf::Vector2i coordinates) const
 
 void Game::console()
 {
-    while(grid->getGenNumber() < genMax)
+    std::string intConcatenated;
+    while(grid->getGenNumber() < genMax + 1)
     {
         std::ofstream outputFile("Grille_Generation_Numero_"+std::to_string(grid->getGenNumber())+"_out.txt");
-        std::string intConcatenated;
         if (outputFile.is_open())
         {
-            for(int line; line < grid->getHeight(); line++)
+            for(int line = 0; line < grid->getHeight(); line++)
             {
-            intConcatenated = "";
-            for (int nb : grid->getLine(grid->getGenNumber()))
-            {
-                intConcatenated += std::to_string(nb);
-            }
-            outputFile <<  + "\n";
+                intConcatenated = "";
+                for (int nb : grid->getLine(line))
+                {
+                    intConcatenated += std::to_string(nb) + " ";
+                }
+                outputFile << intConcatenated + "\n";
             }
         }
+        grid->nextGen();
     }
 }
 
@@ -149,22 +142,84 @@ void Game::loadFile(const std::string filename){
         std::cerr << "Erreur : Impossible d'ouvrir " << filename << std::endl;
     }
 
-    grid->clear(); // Vide la grille 
-    int x , y;
-    for (std::string line; std::getline(file, line); ){
-        std::vector<Cell*> row;
-        for (char c : line)
-           if (c == '0')
-            {
-                row.push_back(new Alive_Cell(x, y));
-                x++;
-            }
-            else if (c == '1')
-            {
-                row.push_back(new Dead_Cell(x, y));
-                x++;
-            }
-        y++;
-        if (!row.empty()) grid->addLine(row);    //si ligne valide(contient data) alors ajout ligne a la grille 
+    grid->clear();
+    int x = 0, y = 0;
+    int width, height;
+    file >> height; 
+    file >> width;
+    file.ignore();
+    file.clear();
+    file.seekg(0,std::ios::beg);
+    if (!((width > 1 || height > 1) && file.get() == (char)10)) {
+        width = 0;
+        height = 0;
+        file.clear();
+        file.seekg(0,std::ios::beg);
+        for (std::string line; std::getline(file, line); height++)
+        {
+            if(std::count(line.begin(), line.end(), ' ') + 1 > width) width = std::count(line.begin(), line.end(), ' ') + 1;
+        }
+        file.ignore();
+        file.clear();
+        file.seekg(0,std::ios::beg);
     }
+    grid->setSize(width, height);
+    std::vector<Cell*> row;
+    for (char c; file.get(c);)
+    {
+        if (y < height)
+        {
+            switch (c)
+            {
+                case ' ':
+                    break;
+                case '0':
+                    row.push_back(new Dead_Cell(x, y));
+                    x++;
+                    break;
+                case '1':
+                    row.push_back(new Alive_Cell(x, y));
+                    x++;
+                    break;
+                case '\n':
+                    x = 0;
+                    (row.size() + 1 == width) ? grid->addLine(row) : grid->addLine(this->resizeLine(width, row, x, y));
+                    y++;
+                    row = {};
+                    break;
+            }
+        }
+    }
+    (row.size() + 1 == width) ? grid->addLine(row) : grid->addLine(this->resizeLine(width, row, x, y));
+    file.close();
+    while (height - 1 > y)
+    {
+        x = 0;
+        row = {};
+        while (width - 1 > x)
+        {
+            row.push_back(new Dead_Cell(x, y));
+            x++;
+        }
+        grid->addLine(row);
+    }
+    grid->endInit();
+}
+
+std::vector<Cell*> Game::resizeLine(int width, std::vector<Cell*> row,int x ,int y) const
+{
+    if (row.size() > width)
+    {
+        while (row.size() > width)
+        {
+            row.pop_back();
+        }
+    } else {
+        while (row.size() < width)
+        {
+            row.push_back(new Dead_Cell(x, y));
+            x++;
+        }
+    }
+    return row;
 }

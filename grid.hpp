@@ -24,9 +24,11 @@ public:
     ~Grid();
 
     // Méthodes principales
+    void setSize(int width, int height);
     void clear();                                       // Nettoyer la grille
+    void endInit();
     void addLine(std::vector<Cell*>);                   // Ajoute une ligne à la grille
-    std::vector<Cell*> getNeighbours(Cell* element);    // Obtenir les voisins
+    sf::Vector2i getNeighbours(Cell* element);    // Obtenir les voisins
     void nextGen();                                     // Calculer la prochaine itération
     void display(sf::RenderWindow* window);             // Afficher la grille (mode graphique)
     void invertCell(int x, int y);                      // Inverser l'état d'une cellule

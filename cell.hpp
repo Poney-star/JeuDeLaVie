@@ -13,7 +13,7 @@ public:
     void setConst();
     bool isConst() const;
     Cell(int x, int y, sf::Vector2i neighbours, bool isConstant);
-    void setneighbours(sf::Vector2i neighbours);
+    void setNeighbours(sf::Vector2i neighbours);
     int getX() const, getY() const;
 protected:
     int x, y;
