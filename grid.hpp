@@ -12,10 +12,10 @@ private:
     std::vector<std::vector<Cell*>> elements;       // Liste contenant toutes les cellules
     int width;                                      // Largeur de la grille
     int height;                                     // Hauteur de la grille
-    sf::Sprite deadCellSprite;                      // Sprite pour les cellules mortes
-    sf::Sprite aliveCellSprite;                     // Sprite pour les cellules vivantes
-    sf::Sprite constDeadCellSprite;                 // Sprite pour les cellules mortes constantes
-    sf::Sprite constAliveCellSprite;                // Sprite pour les cellules vivantes constantes
+    static sf::Sprite deadCellSprite;                      // Sprite pour les cellules mortes
+    static sf::Sprite aliveCellSprite;                     // Sprite pour les cellules vivantes
+    static sf::Sprite constDeadCellSprite;                 // Sprite pour les cellules mortes constantes
+    static sf::Sprite constAliveCellSprite;                // Sprite pour les cellules vivantes constantes
     static int genNumber;                           // Numéro de la itération actuelle
 
 public:

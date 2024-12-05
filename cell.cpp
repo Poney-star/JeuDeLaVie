@@ -1,11 +1,11 @@
 #include "cell.hpp"
 
 void Cell::setConst(){
-    isConstant = !isConstant;
+    constant = !constant;
 }
 
 bool Cell:: isConst() const{
-    return isConstant;
+    return constant;
 }
 
 int Cell::getX() const{
@@ -19,7 +19,7 @@ int Cell::getY() const{
 Cell::Cell(){
     x = 0;
     y= 0;
-    isConstant = false;
+    constant = false;
     neighbours = sf::Vector2i(0, 0);
 }
 void Alive_Cell:: update(Grid *grid) {
@@ -32,6 +32,13 @@ void Alive_Cell:: update(Grid *grid) {
 Alive_Cell::Alive_Cell(int x, int y){
     this->x = x;
     this->y = y;
+    this->constant = false;
+}
+
+Dead_Cell::Dead_Cell(int x, int y){
+    this->x = x;
+    this->y = y;
+    this->constant = false;
 }
 
 void Dead_Cell::update(Grid *grid) {   

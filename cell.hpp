@@ -18,7 +18,7 @@ public:
 protected:
     int x, y;
     sf::Vector2i neighbours;
-    bool isConstant;
+    bool constant;
 };
 
 class Alive_Cell : public Cell 

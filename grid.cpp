@@ -2,6 +2,13 @@
 
 // Initialisation du membre statique
 int Grid::genNumber = 0;
+sf::Sprite Grid::deadCellSprite, Grid::aliveCellSprite, Grid::constDeadCellSprite, Grid::constAliveCellSprite;
+
+
+//Constructeur
+Grid::Grid(int width, int height) : width(width), height(height){
+    elements = {{}};
+}
 
 // Destructeur
 Grid::~Grid()
@@ -103,13 +110,13 @@ void Grid::setConstant(int x, int y)
 // Méthode pour redimensionner les sprites !!!!!!!!!!!
 void Grid::resizeSprites(int cellWidth, int cellHeight)
 {
-    deadCellSprite.setScale(cellWidth / deadCellSprite.getLocalBounds().width,
+    Grid::deadCellSprite.setScale(cellWidth / deadCellSprite.getLocalBounds().width,
                             cellHeight / deadCellSprite.getLocalBounds().height);
-    aliveCellSprite.setScale(cellWidth / aliveCellSprite.getLocalBounds().width,
+    Grid::aliveCellSprite.setScale(cellWidth / aliveCellSprite.getLocalBounds().width,
                              cellHeight / aliveCellSprite.getLocalBounds().height);
-    constDeadCellSprite.setScale(cellWidth / constDeadCellSprite.getLocalBounds().width,
+    Grid::constDeadCellSprite.setScale(cellWidth / constDeadCellSprite.getLocalBounds().width,
                                  cellHeight / constDeadCellSprite.getLocalBounds().height);
-    constAliveCellSprite.setScale(cellWidth / constAliveCellSprite.getLocalBounds().width,
+    Grid::constAliveCellSprite.setScale(cellWidth / constAliveCellSprite.getLocalBounds().width,
                                   cellHeight / constAliveCellSprite.getLocalBounds().height);
 }
 
@@ -132,4 +139,14 @@ std::vector<int> Grid::getLine(int lineNumber)
         line.push_back((typeid(*cell) == typeid(Alive_Cell))? 1 : 0);
     }
     return line;
+}
+
+sf::Vector2i Grid::getSpriteBounds()
+{
+    return sf::Vector2i(Grid::deadCellSprite.getGlobalBounds().width,Grid::deadCellSprite.getGlobalBounds().height);
+}
+
+void Grid::addLine(std::vector<Cell*> line)
+{
+    elements.push_back(line);
 }

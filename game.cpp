@@ -48,6 +48,12 @@ void Game::setMode()
     }
 }
 
+void Game::setConstantCell(sf::Vector2i coordinates) const
+{
+    sf::Vector2i shapeBounds = grid->getSpriteBounds();
+    grid->setConstant(floor(coordinates.x / shapeBounds.x),floor(coordinates.y / shapeBounds.y));
+}
+
 void Game::console()
 {
     while(grid->getGenNumber() < genMax)
@@ -125,6 +131,8 @@ void Game::init()
     std::string path;
     std::cout << "Indiquer le chemin d'accès du fichier: ";
     std::cin >> path;
+    std::cout << "Indiquer le nombre de générations à effectuer: ";
+    std::cin >> genMax;
     this->loadFile(path);
     this->setMode();
 }
