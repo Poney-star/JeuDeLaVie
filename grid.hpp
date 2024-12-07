@@ -1,7 +1,6 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include <list>
 #include <SFML/Graphics.hpp>
 #include "cell.hpp"
 

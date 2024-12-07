@@ -64,12 +64,15 @@ void Game::console()
                 outputFile << intConcatenated + "\n";
             }
         }
+        outputFile.close();
         grid->nextGen();
     }
 }
 
 void Game::graphic()
 {
+    window->create(sf::VideoMode(800,600), "Pig Dance");
+    int timer;
     while (window->isOpen())
     {
         sf::Event event;
@@ -101,9 +104,11 @@ void Game::graphic()
                     }
                     break;
             }
-            if (running)
+            if (running && timer == interval)
             {
                 grid->nextGen();
+            } else {
+                grid->display();
             }
         }
     }
@@ -148,9 +153,7 @@ void Game::loadFile(const std::string filename){
     file >> height; 
     file >> width;
     file.ignore();
-    file.clear();
-    file.seekg(0,std::ios::beg);
-    if (!((width > 1 || height > 1) && file.get() == (char)10)) {
+    if (!((width > 1 && height > 1) && file.get() == (char)10)) {
         width = 0;
         height = 0;
         file.clear();

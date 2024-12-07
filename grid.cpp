@@ -61,6 +61,7 @@ void Grid::clear()
 {
     elements = {};
 }
+
 // Méthode pour afficher la grille (mode graphique) ?????????
 void Grid::display(sf::RenderWindow* window)
 {

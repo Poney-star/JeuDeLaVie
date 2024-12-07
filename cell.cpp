@@ -30,7 +30,7 @@ void Cell::setNeighbours(sf::Vector2i neighbours)
 }
 
 void Alive_Cell:: update(Grid *grid) {
-    if(!(neighbours.x != 2 && neighbours.x != 3))
+    if(neighbours.x != 2 && neighbours.x != 3)
     {
         grid->invertCell(x, y);
     }
