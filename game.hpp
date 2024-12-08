@@ -10,6 +10,10 @@
 #include <thread>
 #include <chrono>
 
+class GraphicsManager;
+class Grid;
+class Cell;
+
 class Game {
 private:
     GraphicsManager* renderer;

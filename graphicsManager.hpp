@@ -43,7 +43,7 @@ public:
     // Méthodes d'affichage
     void renderStartMenu();
     void renderSFAMMenu(); //render SFAM (Select File And Mode) Menu
-    void renderGame();
+    void renderGame(Game* game);
     void display();
     // Autres
     bool buttonActivatedSFAMMenu(sf::Vector2i mousePos);

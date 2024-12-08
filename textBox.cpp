@@ -37,8 +37,11 @@ std::string TextBox::getString() const
 
 void TextBox::addChar(std::string str)
 {
-    if (charLimit > text->getString().getSize()) text->setString(text->getString() + str);
-    cursorPos += 1;
+    if (charLimit > text->getString().getSize() + str.length())
+    {
+        text->setString(text->getString() + str);
+        cursorPos += str.length();
+    }
 }
 
 void TextBox::deleteChar()

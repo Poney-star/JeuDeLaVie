@@ -64,8 +64,8 @@ bool GraphicsManager::loadAssets()
     if (!textures["menuBackground"].loadFromFile("assets/textures/deadCellTexture.png")) return false;
     if (!textures["aliveCell"].loadFromFile("assets/textures/aliveCellTexture.png")) return false;
     if (!textures["deadCell"].loadFromFile("assets/textures/deadCellTexture.png")) return false;
-    if (!textures["constAliveCell"].loadFromFile("assets/textures/aliveCellTexture.png")) return false;
-    if (!textures["constDeadCell"].loadFromFile("assets/textures/deadCellTexture.png")) return false;
+    if (!textures["constAliveCell"].loadFromFile("assets/textures/constAliveCellTexture.png")) return false;
+    if (!textures["constDeadCell"].loadFromFile("assets/textures/constDeadCellTexture.png")) return false;
 
     //Sprites
     sprites["menuBackground"].setTexture(textures["menuBackground"]);
@@ -143,25 +143,30 @@ bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
 {
     std::ifstream file(textBoxes["path"].getString());
     if (!file) {
+        std::cout<<"fail"<<std::endl;
         return 0;
     }
     if(buttons["consoleButton"].isHovered(mousePos))
     {
         Game game = Game();
         if (game.loadFile(textBoxes["path"].getString())) game.console();
+        return 1;
         window.close();
     } else if (buttons["graphicButton"].isHovered(mousePos))
     {
         Game game = Game();
-        if (game.loadFile(textBoxes["path"].getString())) game.graphic(&window);
+        if (game.loadFile(textBoxes["path"].getString())) renderGame(&game);
+        return 1;
     } else if (buttons["checkFile"].isHovered(mousePos))
     {
-
+        Game game = Game();
+        if (game.loadFile(textBoxes["path"].getString())) return 1;
+        return 0;
     }
-    return 1;
+    return 0;
 }
 
-void GraphicsManager::renderGame()
+void GraphicsManager::renderGame(Game* game)
 {
     
 }
@@ -200,6 +205,11 @@ void GraphicsManager::display()
                         break;
                     case sf::Keyboard::RAlt:
                         break;
+                    case sf::Keyboard::LShift:
+                        break;
+                    case sf::Keyboard::SemiColon:
+                        (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? textBoxes["path"].addChar(".") : textBoxes["path"].addChar(";");
+                        break;
                     case sf::Keyboard::Num8:
                         if (sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt)) textBoxes["path"].addChar("\\") ;
                         break;
@@ -213,7 +223,7 @@ void GraphicsManager::display()
             {
                 textBoxes["path"].changeFocusState();
                 toCheck.push_back(&textBoxes["path"]);
-            } else {
+            } else if (textBoxes["path"].getFocusState()){
                 textBoxes["path"].changeFocusState();
                 toCheck.pop_back();
                 buttonActivatedSFAMMenu(cursor.getPosition());
