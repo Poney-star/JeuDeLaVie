@@ -18,7 +18,7 @@ class Cursor {
 
     sf::Vector2i getPosition() const; // Retourne la position actuelle
 
-    void clic(const sf::Event* event, Game* game);
+    void clicOnCell(const sf::Event* event, Game* game);
 
     void updatePosition(int x , int y);
 };

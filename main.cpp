@@ -3,5 +3,7 @@
 int main() {
     GraphicsManager gM;
     gM.renderSFAMMenu();
-    while(1){}
+    while(gM.getWindow()->isOpen()){
+    gM.display();
+    }
 }

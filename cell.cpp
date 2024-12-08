@@ -36,13 +36,18 @@ void Cell::invertValue()
     value = !value;
 }
 
-//Constructeur
+//Constructeur / Destructeur
 
 mutableCell::mutableCell(int x, int y, bool value) :aliveNeighbours(0)
 { 
     this->x = x; 
     this->y = y; 
     this->value = value;
+}
+
+mutableCell::~mutableCell()
+{
+    delete this;
 }
 
 //Méthodes
@@ -62,7 +67,7 @@ void mutableCell::update(Grid *grid) {
     }
 }
 
-//Constructeur
+//Constructeur / Destructeur
 
 constCell::constCell(int x, int y, bool value)
 {
@@ -71,9 +76,12 @@ constCell::constCell(int x, int y, bool value)
     this->value = value;
 }
 
+constCell::~constCell()
+{
+    delete this;
+}
+
 //Méthode
 
 void constCell::update(Grid *grid)
-{
-    grid->invertConst(x, y);
-}
+{}

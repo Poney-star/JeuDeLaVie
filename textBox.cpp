@@ -25,6 +25,16 @@ void TextBox::draw(sf::RenderWindow* window) const
     window->draw(*text);
 }
 
+void TextBox::moveCursor(int mov)
+{
+    if (cursorPos + mov < text->getString().getSize() + 1 && cursorPos + mov > 0) cursorPos += mov; 
+}
+
+std::string TextBox::getString() const
+{
+    return text->getString();
+}
+
 void TextBox::addChar(std::string str)
 {
     if (charLimit > text->getString().getSize()) text->setString(text->getString() + str);
@@ -33,16 +43,26 @@ void TextBox::addChar(std::string str)
 
 void TextBox::deleteChar()
 {
-    std::string str = text->getString();
-    str.erase(cursorPos, 1);
-    text->setString(str);
+    if (cursorPos != 0) 
+    {
+        std::string str = text->getString();
+        str.erase(cursorPos - 1, 1);
+        cursorPos-=1;
+        text->setString(str);
+    }
 }
 
-/* void TextBox::focusOn()
+bool TextBox::getFocusState() const
+{
+    return focus;
+}
+/*
+void TextBox::focusOn(sf::RenderWindow* window)
 {
     while (focus)
     {
         sf::Event event;
+        window->pollEvent(event);
         switch (event.type)
         {
             case sf::Event::Closed:
@@ -56,14 +76,27 @@ void TextBox::deleteChar()
                         case sf::Keyboard::Escape:
                             changeFocusState();
                             break;
-                        case sf::Keyboard::Space:
+                        case sf::Keyboard::Backspace:
+                            deleteChar();
+                            break;
+                        default:
                             addChar(sf::Keyboard::getDescription(event.key.scancode));
+                            window->draw(*sprite);
+                            window->draw(*text);
                             break;
                     }
                     break;
-        }    
+        }
+        window->display();    
     }
-} */
+}
+*/
+
+void TextBox::setScale(sf::Vector2f scaleFactor)
+{
+    sprite->setScale(scaleFactor);
+    text->setScale(scaleFactor);
+}
 
 void TextBox::changeFocusState()
 {

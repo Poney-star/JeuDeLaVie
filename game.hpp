@@ -20,7 +20,7 @@ private:
 public:
     Game();
     void console();
-    void graphic();
+    void graphic(sf::RenderWindow* window);
     void display() const;
     void pause();
     bool loadFile(const std::string path);

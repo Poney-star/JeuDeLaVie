@@ -6,12 +6,10 @@ Game::Game()
     interval = 2000;
 }
 
-//renderer->getWindow()->setView(sf::View(sf::FloatRect(0, 0, width, height)));
-
 void Game::setConstantCell(sf::Vector2i coordinates) const
 {
     sf::FloatRect shapeBounds = renderer->getSprite("aliveCell")->getGlobalBounds();
-    grid->invertConst(floor(coordinates.x / shapeBounds.width),floor(coordinates.y / shapeBounds.height));
+    grid->invertConst(floor(coordinates.x / shapeBounds.width),floor(coordinates.y / shapeBounds.height), renderer);
 }
 
 void Game::console()
@@ -36,8 +34,8 @@ void Game::console()
         grid->nextGen();
     }
 }
-// A REVOIR
-void Game::graphic()
+
+void Game::graphic(sf::RenderWindow* window)
 {
     int timer;
     while (renderer->getWindow()->isOpen())
@@ -53,7 +51,7 @@ void Game::graphic()
                 case sf::Event::Resized:
                     break;
                 case sf::Event::MouseButtonPressed:
-                    renderer->getCursor()->clic(&event, this);
+                    renderer->getCursor()->clicOnCell(&event, this);
                     break;
                 case sf::Event::MouseMoved:
                     renderer->getCursor()->updatePosition(event.mouseMove.x, event.mouseMove.y);
@@ -93,7 +91,7 @@ void Game::pause()
 void Game::invertCell(sf::Vector2i coordinates) const
 {
     sf::FloatRect shapeBounds = renderer->getSprite("aliveCell")->getGlobalBounds();
-    grid->invertValue(floor(coordinates.x / shapeBounds.width),floor(coordinates.y / shapeBounds.height));
+    grid->invertValue(floor(coordinates.x / shapeBounds.width),floor(coordinates.y / shapeBounds.height), renderer);
 }
 
 bool Game::loadFile(const std::string filename){

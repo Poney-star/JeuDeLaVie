@@ -16,9 +16,11 @@ public:
     TextBox(sf::Sprite* sprite, sf::Text* text, sf::Vector2f position);
     void draw(sf::RenderWindow* window) const;
     void changeFocusState();
+    void moveCursor(int mov);
     void addChar(std::string str);
     void deleteChar();
-    //void focusOn();
+    void setScale(sf::Vector2f scaleFactor);
+    bool getFocusState() const;
     std::string getString() const;
 };
 

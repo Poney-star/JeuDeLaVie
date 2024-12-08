@@ -13,16 +13,16 @@ sf::Vector2i Cursor::getPosition() const {
 }
 
 
-void Cursor::clic(const sf::Event* event, Game* game) {
+void Cursor::clicOnCell(const sf::Event* event, Game* game) {
 
-        if (event->mouseButton.button == sf::Mouse::Left) { // Si clic gauche
-            game->invertCell(this->getPosition()); // Appelle invertCell avec la position actuelle du curseur
-        } else if (event->mouseButton.button == sf::Mouse::Right) { // Si clic droit
-            game->setConstantCell(this->getPosition()); // Appelle setConstant avec la position actuelle du curseur
-        }
+    if (event->mouseButton.button == sf::Mouse::Left) { // Si clic gauche
+        game->invertCell(this->getPosition()); // Appelle invertCell avec la position actuelle du curseur
+    } else if (event->mouseButton.button == sf::Mouse::Right) { // Si clic droit
+        game->setConstantCell(this->getPosition()); // Appelle setConstant avec la position actuelle du curseur
+    }
 }
 
 void Cursor::updatePosition(int x, int y) {
-    x = x;
-    y = y;
+    this->x = x;
+    this->y = y;
 }

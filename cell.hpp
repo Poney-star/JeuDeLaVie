@@ -9,7 +9,7 @@ class Cell
 {
 public:
     Cell();
-    ~Cell();
+    virtual ~Cell();
     virtual void update(Grid *grid) = 0;
     int getX() const, getY() const;
     bool getValue() const;
@@ -25,6 +25,7 @@ private:
     int aliveNeighbours;
 public:
     mutableCell(int x, int y, bool value);
+    ~mutableCell();
     void setNeighbours(int aliveNeighbours);
     void update(Grid *grid) override;
 };
@@ -33,6 +34,7 @@ class constCell : public Cell
 {
 public:
     constCell(int x, int y, bool value);
+    ~constCell();
     void update(Grid *grid) override;
 };
 

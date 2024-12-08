@@ -5,14 +5,21 @@
 #include "cursor.hpp"
 #include "button.hpp"
 #include "cell.hpp"
+#include "game.hpp"
 #include <map>
+#include <chrono>
+#include <thread>
 #include <variant>
+#include <fstream>
+
+class Cell;
 
 class GraphicsManager
 {
 private:
     Cursor cursor;
     sf::RenderWindow window;
+    sf::Vector2f originalSize;
     std::map<std::string, sf::Texture> textures;
     std::map<std::string, sf::Sprite> sprites;
     std::map<std::string, sf::Font> fonts;
@@ -39,6 +46,7 @@ public:
     void renderGame();
     void display();
     // Autres
+    bool buttonActivatedSFAMMenu(sf::Vector2i mousePos);
     bool loadAssets();
     void addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*> obj);
 };

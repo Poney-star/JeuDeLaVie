@@ -33,37 +33,28 @@ void Button::setText(sf::Text* text)
 {
     buttonText = text;
     buttonText->setFillColor(sf::Color::Black);
-    sf::FloatRect textBounds = buttonText->getGlobalBounds();
+    sf::FloatRect textBounds = buttonText->getLocalBounds();
     buttonText->setPosition(
         position.x + (shape.getSize().x - textBounds.width) / 2 - textBounds.left,
         position.y + (shape.getSize().y - textBounds.height) / 2 - textBounds.top
     );
 }
 
-void Button::windowResized(int width, int height, sf::Vector2f scaleFactor)
+void Button::setScale(sf::Vector2f scaleFactor)
 {
-    shape.setScale(scaleFactor);
-    position.x = position.x * scaleFactor.x;
-    position.y = position.y * scaleFactor.y;
-    shape.setPosition(position.x, position.y);
-    buttonText->setPosition(
-        position.x + (shape.getSize().x - buttonText->getLocalBounds().width) / 2 - buttonText->getLocalBounds().left,
-        position.y + (shape.getSize().y - buttonText->getLocalBounds().height) / 2 - buttonText->getLocalBounds().top
-    );
+    shape.setOrigin(scaleFactor.x * position.x, scaleFactor.y * position.x);
+    buttonText->setScale(scaleFactor);
 }
 
 void Button::update(sf::Vector2i mousePos, sf::RenderWindow* ctx) {
-    sf::FloatRect bounds = shape.getGlobalBounds();
-
-    if (bounds.contains(mousePos.x, mousePos.y)) {
-        shape.setFillColor(hoverColor);           
+    if (isHovered(mousePos)) {
+        shape.setFillColor(hoverColor);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             shape.setFillColor(activeColor);
         }
     } else {
         shape.setFillColor(idleColor);            
     }
-
     ctx->draw(shape); 
     ctx->draw(*buttonText); 
 }
@@ -78,5 +69,9 @@ void Button::setSize(float width, float height) {
 
 bool Button::isHovered(sf::Vector2i mousePos) {
     sf::FloatRect bounds = shape.getGlobalBounds();
-    return bounds.contains(mousePos.x, mousePos.y);
+    if (bounds.contains(mousePos.x, mousePos.y))
+    {
+        return true;
+    }
+    return false;
 }

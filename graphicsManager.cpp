@@ -6,6 +6,7 @@ GraphicsManager::GraphicsManager()
 {
     cursor = Cursor();
     window.create(sf::VideoMode(800,600), "Pig Dance", sf::Style::Default);
+    originalSize = sf::Vector2f(800,600);
     if(loadAssets())
     {}
 }
@@ -124,13 +125,6 @@ void GraphicsManager::renderStartMenu()
         &buttons["settingsButton"],
         &buttons["quitButton"]
     };
-
-    window.draw(sprites["menuBackground"]);
-    window.draw(texts["menuTitle"]);
-    buttons["startButton"].update(cursor.getPosition(), &window);
-    buttons["settingsButton"].update(cursor.getPosition(), &window);
-    buttons["quitButton"].update(cursor.getPosition(), &window);
-    window.display();
 }
 
 void GraphicsManager::renderSFAMMenu()
@@ -143,21 +137,92 @@ void GraphicsManager::renderSFAMMenu()
         &buttons["checkFile"]
     };
 
-    buttons["consoleButton"].update(cursor.getPosition(), &window);
-    buttons["graphicButton"].update(cursor.getPosition(), &window);
-    buttons["checkFile"].update(cursor.getPosition(), &window);
-    window.display();
+}
+
+bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
+{
+    std::ifstream file(textBoxes["path"].getString());
+    if (!file) {
+        return 0;
+    }
+    if(buttons["consoleButton"].isHovered(mousePos))
+    {
+        Game game = Game();
+        if (game.loadFile(textBoxes["path"].getString())) game.console();
+        window.close();
+    } else if (buttons["graphicButton"].isHovered(mousePos))
+    {
+        Game game = Game();
+        if (game.loadFile(textBoxes["path"].getString())) game.graphic(&window);
+    } else if (buttons["checkFile"].isHovered(mousePos))
+    {
+
+    }
+    return 1;
 }
 
 void GraphicsManager::renderGame()
 {
     
 }
-
+//RESTE A GERER LE RESIZE EVENT
 void GraphicsManager::display()
 {
+    sf::Event event;
+    sf::Vector2f scaleFactor;
+    window.waitEvent(event);
+    switch (event.type)
+    {
+        case sf::Event::Closed:
+            window.close();
+            break;
+        case sf::Event::Resized:
+            scaleFactor = sf::Vector2f(event.size.width / originalSize.x, event.size.height / originalSize.y);
+            window.setView(sf::View(sf::FloatRect(0,0,event.size.width,event.size.height)));
+            break;
+        case sf::Event::MouseMoved: 
+            cursor.updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
+            break;
+        case sf::Event::KeyPressed:
+            switch(event.key.code)  
+                {
+                    case sf::Keyboard::Escape:
+                        textBoxes["path"].changeFocusState();
+                        break;
+                    case sf::Keyboard::Backspace:
+                        textBoxes["path"].deleteChar();
+                        break;
+                    case sf::Keyboard::Left:
+                        textBoxes["path"].moveCursor(-1);
+                        break;
+                    case sf::Keyboard::Right:
+                        textBoxes["path"].moveCursor(1);
+                        break;
+                    case sf::Keyboard::RAlt:
+                        break;
+                    case sf::Keyboard::Num8:
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt)) textBoxes["path"].addChar("\\") ;
+                        break;
+                    default:
+                        textBoxes["path"].addChar(sf::Keyboard::getDescription(event.key.scancode));
+                        break;
+                }
+            break;
+        case sf::Event::MouseButtonPressed:
+            if(sprites["pathBox"].getGlobalBounds().contains(cursor.getPosition().x, cursor.getPosition().y) && !textBoxes["path"].getFocusState())
+            {
+                textBoxes["path"].changeFocusState();
+                toCheck.push_back(&textBoxes["path"]);
+            } else {
+                textBoxes["path"].changeFocusState();
+                toCheck.pop_back();
+                buttonActivatedSFAMMenu(cursor.getPosition());
+            }
+        default:
+            break;
+    }
     for (const auto& item : toCheck) {
-        std::visit([this](const auto& value) {
+        std::visit([this, scaleFactor](const auto& value) {
             if constexpr (std::is_same_v<std::decay_t<decltype(value)>, sf::Sprite*>)
             {
                 window.draw(*value);
@@ -172,10 +237,11 @@ void GraphicsManager::display()
                 value->update(cursor.getPosition(), &window);
             } else if constexpr (std::is_same_v<std::decay_t<decltype(value)>, Cell*>)
             {
-                value->getX(), value->getY();
+                
             } 
         }, item);
     }
+    window.display();
 }
 
 void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*> obj)
