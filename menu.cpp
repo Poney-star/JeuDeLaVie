@@ -58,9 +58,9 @@ void Menu::start()
     game->init();
 }
 //A MODIFIER EN INTEGRANT LE MENU DANS GRAPHICSMANAGER
-void Menu::update(sf::RenderWindow &window)
+void Menu::update()
 {
-    while(window.isOpen())
+    while(GraphicsManager.getWindow()->isOpen())
     {
         window.draw(background);
         window.draw(title);

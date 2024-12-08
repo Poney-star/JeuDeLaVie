@@ -7,7 +7,6 @@
 
 Game::Game()
 {
-    window = new sf::RenderWindow();
     grid = new Grid(0,0);
     cursor = new Cursor();
     interval = 200;
@@ -86,7 +85,6 @@ void Game::graphic()
     {
         std::cerr << "Problème de chargement des textures" << std::endl;
     }
-    window->create(sf::VideoMode(800,600), "Pig Dance");
     int timer;
     while (window->isOpen())
     {
