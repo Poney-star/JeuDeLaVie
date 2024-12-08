@@ -3,9 +3,17 @@
 
 // Initialisation du membre statique
 int Grid::genNumber = 0;
-sf::Sprite Grid::deadCellSprite, Grid::aliveCellSprite, Grid::constDeadCellSprite, Grid::constAliveCellSprite;
 
+sf::Texture Grid::deadCellTexture, Grid::aliveCellTexture, Grid::constDeadCellTexture, Grid::constAliveCellTexture;
 
+bool Grid::loadTextures()
+{
+    if(!deadCellTexture.loadFromFile("assets/textures/DeadCellTexture.png") && !aliveCellTexture.loadFromFile("assets/textures/AliveCellTexture.png") && !constDeadCellTexture.loadFromFile("assets/textures/DeadCellTexture.png") && !constAliveCellTexture.loadFromFile("assets/textures/AliveCellTexture.png"));
+    {
+        return false;
+    }
+    return true;
+}
 //Constructeur
 Grid::Grid(int width, int height) : width(width), height(height){
     elements = {{}};
@@ -65,21 +73,19 @@ void Grid::clear()
 // Méthode pour afficher la grille (mode graphique) ?????????
 void Grid::display(sf::RenderWindow* window)
 {
+    sf::Texture texture;
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
-            sf::Sprite sprite;
-            if (cell->isConst()) {  // Si la cellule est vivante
+            if (typeid(*cell) == typeid(Alive_Cell)) {  // Si la cellule est vivante
                 // Choisir le sprite en fonction de l'état de la cellule (vivante ou constante)
-                sprite = cell->isConst() ? constAliveCellSprite : aliveCellSprite;
+                texture = cell->isConst() ? constAliveCellTexture : aliveCellTexture;
             } else {  // Si la cellule est morte
                 // Choisir le sprite pour la cellule morte
-                sprite = cell->isConst() ? constDeadCellSprite : deadCellSprite;
+                texture = cell->isConst() ? constDeadCellTexture : deadCellTexture;
             }
-            // Placer le sprite à la position appropriée de la cellule
-            sprite.setPosition(cell->getX() * sprite.getLocalBounds().width,
-                            cell->getY() * sprite.getLocalBounds().height);
-            window->draw(sprite);  // Dessiner le sprite sur la fenêtre
+            cell->getSprite()->setTexture(texture);
+            window->draw(*cell->getSprite());  // Dessiner le sprite sur la fenêtre
         }
     }
 }
@@ -99,28 +105,17 @@ void Grid::invertCell(int x, int y)
 // Méthode pour définir une cellule comme constante
 void Grid::setConstant(int x, int y)
 {
+    elements[y][x]->setConst(); 
+}
+
+void Grid::resizeSprites(int width, int height)
+{
     for (std::vector<Cell*> row : elements)
     {
         for (Cell* cell : row) {
-            if (cell->getX() == x && cell->getY() == y) {
-                cell->setConst();  // Marquer la cellule comme constante
-                break;
-            }
+            cell->resizeSprite(width,height,this->width,this->height);
         }
     }
-}
-
-// Méthode pour redimensionner les sprites !!!!!!!!!!!
-void Grid::resizeSprites(int cellWidth, int cellHeight)
-{
-    Grid::deadCellSprite.setScale(cellWidth / deadCellSprite.getLocalBounds().width,
-                            cellHeight / deadCellSprite.getLocalBounds().height);
-    Grid::aliveCellSprite.setScale(cellWidth / aliveCellSprite.getLocalBounds().width,
-                             cellHeight / aliveCellSprite.getLocalBounds().height);
-    Grid::constDeadCellSprite.setScale(cellWidth / constDeadCellSprite.getLocalBounds().width,
-                                 cellHeight / constDeadCellSprite.getLocalBounds().height);
-    Grid::constAliveCellSprite.setScale(cellWidth / constAliveCellSprite.getLocalBounds().width,
-                                  cellHeight / constAliveCellSprite.getLocalBounds().height);
 }
 
 // Accesseur pour l'itération actuelle
@@ -155,7 +150,7 @@ std::vector<int> Grid::getLine(int lineNumber)
 
 sf::Vector2i Grid::getSpriteBounds()
 {
-    return sf::Vector2i(Grid::deadCellSprite.getGlobalBounds().width,Grid::deadCellSprite.getGlobalBounds().height);
+    return sf::Vector2i(elements[0][0]->getSprite()->getGlobalBounds().width,elements[0][0]->getSprite()->getGlobalBounds().height);
 }
 
 void Grid::addLine(std::vector<Cell*> line)

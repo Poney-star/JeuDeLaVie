@@ -22,6 +22,8 @@ public:
     void display() const;
     void pause();
     void init();
+    sf::RenderWindow* getWindow() const;
+    Cursor* getCursor() const;
     void loadFile(const std::string path);
     std::vector<Cell*> resizeLine(int width, std::vector<Cell*> row,int x ,int y) const;
     void invertCell(sf::Vector2i coordinates) const;

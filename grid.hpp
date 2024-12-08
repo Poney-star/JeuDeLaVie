@@ -11,10 +11,7 @@ private:
     std::vector<std::vector<Cell*>> elements;       // Liste contenant toutes les cellules
     int width;                                      // Largeur de la grille
     int height;                                     // Hauteur de la grille
-    static sf::Sprite deadCellSprite;                      // Sprite pour les cellules mortes
-    static sf::Sprite aliveCellSprite;                     // Sprite pour les cellules vivantes
-    static sf::Sprite constDeadCellSprite;                 // Sprite pour les cellules mortes constantes
-    static sf::Sprite constAliveCellSprite;                // Sprite pour les cellules vivantes constantes
+    static sf::Texture deadCellTexture, aliveCellTexture, constDeadCellTexture, constAliveCellTexture;
     static int genNumber;                           // Numéro de la itération actuelle
 
 public:
@@ -23,6 +20,7 @@ public:
     ~Grid();
 
     // Méthodes principales
+    bool loadTextures();
     void setSize(int width, int height);
     void clear();                                       // Nettoyer la grille
     void endInit();

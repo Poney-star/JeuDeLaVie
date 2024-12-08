@@ -1,10 +1,10 @@
 CC = g++
 
-CFLAGS =
+CFLAGS = -Wall
 
 TARGET = app.exe
 
-SRC = main.cpp cell.cpp cursor.cpp game.cpp grid.cpp
+SRC = main.cpp menu.cpp cell.cpp cursor.cpp game.cpp grid.cpp button.cpp textBox.cpp settings.cpp
 
 LIB = -lsfml-graphics -lsfml-window -lsfml-system 
 

@@ -14,8 +14,11 @@ public:
     bool isConst() const;
     Cell(int x, int y, sf::Vector2i neighbours, bool isConstant);
     void setNeighbours(sf::Vector2i neighbours);
+    void resizeSprite(int width, int height, int windowWidth, int windowHeight);
     int getX() const, getY() const;
+    sf::Sprite* getSprite() const;
 protected:
+    sf::Sprite* sprite;
     int x, y;
     sf::Vector2i neighbours;
     bool constant;

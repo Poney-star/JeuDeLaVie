@@ -1,20 +1,34 @@
 #include "cell.hpp"
 #include <iostream>
 
-void Cell::setConst(){
+void Cell::setConst()
+{
     constant = !constant;
 }
 
-bool Cell:: isConst() const{
+bool Cell:: isConst() const
+{
     return constant;
 }
 
-int Cell::getX() const{
+int Cell::getX() const
+{
     return x;
 }
 
-int Cell::getY() const{
+int Cell::getY() const
+{
     return y;
+}
+
+sf::Sprite* Cell::getSprite() const
+{
+    return sprite;
+}
+
+void Cell::resizeSprite(int width, int height, int windowWidth, int windowHeight)
+{
+    sprite->setScale(windowWidth / width,windowHeight / height);
 }
 
 Cell::Cell(){

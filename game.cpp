@@ -10,6 +10,17 @@ Game::Game()
     window = new sf::RenderWindow();
     grid = new Grid(0,0);
     cursor = new Cursor();
+    interval = 200;
+}
+
+Cursor* Game::getCursor() const
+{
+    return cursor;
+}
+
+sf::RenderWindow* Game::getWindow() const
+{
+    return window;
 }
 
 void Game::resizeWindow(int width, int height) const
@@ -71,6 +82,10 @@ void Game::console()
 
 void Game::graphic()
 {
+    if(!grid->loadTextures())
+    {
+        std::cerr << "Problème de chargement des textures" << std::endl;
+    }
     window->create(sf::VideoMode(800,600), "Pig Dance");
     int timer;
     while (window->isOpen())
@@ -106,9 +121,11 @@ void Game::graphic()
             }
             if (running && timer == interval)
             {
+                window->display();
                 grid->nextGen();
             } else {
-                grid->display();
+                grid->display(window);
+                timer = interval;
             }
         }
     }
