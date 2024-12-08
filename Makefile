@@ -4,7 +4,7 @@ CFLAGS = -Wall
 
 TARGET = app.exe
 
-SRC = main.cpp menu.cpp cell.cpp cursor.cpp game.cpp grid.cpp button.cpp textBox.cpp settings.cpp
+SRC = main.cpp graphicsManager.cpp textBox.cpp grid.cpp game.cpp cursor.cpp cell.cpp button.cpp
 
 LIB = -lsfml-graphics -lsfml-window -lsfml-system 
 

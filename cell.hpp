@@ -9,32 +9,30 @@ class Cell
 {
 public:
     Cell();
+    ~Cell();
     virtual void update(Grid *grid) = 0;
-    void setConst();
-    bool isConst() const;
-    Cell(int x, int y, sf::Vector2i neighbours, bool isConstant);
-    void setNeighbours(sf::Vector2i neighbours);
-    void resizeSprite(int width, int height, int windowWidth, int windowHeight);
     int getX() const, getY() const;
-    sf::Sprite* getSprite() const;
+    bool getValue() const;
+    void invertValue();
 protected:
-    sf::Sprite* sprite;
+    bool value;
     int x, y;
-    sf::Vector2i neighbours;
-    bool constant;
 };
 
-class Alive_Cell : public Cell 
+class mutableCell : public Cell 
 {
+private:
+    int aliveNeighbours;
 public:
-    Alive_Cell(int x, int y);
+    mutableCell(int x, int y, bool value);
+    void setNeighbours(int aliveNeighbours);
     void update(Grid *grid) override;
 };
 
-class Dead_Cell : public Cell 
+class constCell : public Cell 
 {
 public:
-    Dead_Cell(int x, int y);
+    constCell(int x, int y, bool value);
     void update(Grid *grid) override;
 };
 

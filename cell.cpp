@@ -1,15 +1,20 @@
 #include "cell.hpp"
 #include <iostream>
 
-void Cell::setConst()
-{
-    constant = !constant;
+//Constructeur
+
+Cell::Cell(){
+    x = 0;
+    y= 0;
+    value = 0;
 }
 
-bool Cell:: isConst() const
+Cell::~Cell()
 {
-    return constant;
+    delete this;
 }
+
+//Accesseurs
 
 int Cell::getX() const
 {
@@ -21,50 +26,54 @@ int Cell::getY() const
     return y;
 }
 
-sf::Sprite* Cell::getSprite() const
+bool Cell::getValue() const
 {
-    return sprite;
+    return value;
 }
 
-void Cell::resizeSprite(int width, int height, int windowWidth, int windowHeight)
+void Cell::invertValue()
 {
-    sprite->setScale(windowWidth / width,windowHeight / height);
+    value = !value;
 }
 
-Cell::Cell(){
-    x = 0;
-    y= 0;
-    constant = false;
-    neighbours = sf::Vector2i(0, 0);
+//Constructeur
+
+mutableCell::mutableCell(int x, int y, bool value) :aliveNeighbours(0)
+{ 
+    this->x = x; 
+    this->y = y; 
+    this->value = value;
 }
 
-void Cell::setNeighbours(sf::Vector2i neighbours)
+//Méthodes
+
+void mutableCell::setNeighbours(int aliveNeighbours)
 {
-    this->neighbours = neighbours;
+    this->aliveNeighbours = aliveNeighbours;
 }
 
-void Alive_Cell:: update(Grid *grid) {
-    if(neighbours.x != 2 && neighbours.x != 3)
+void mutableCell::update(Grid *grid) {
+    if(this->aliveNeighbours != 2 && this->aliveNeighbours != 3 && this->value == 1)
     {
-        grid->invertCell(x, y);
+        value = 0;
+    } else if (this->aliveNeighbours == 3 && this->value == 0)
+    {
+        value = 1;
     }
 }
 
-Alive_Cell::Alive_Cell(int x, int y){
+//Constructeur
+
+constCell::constCell(int x, int y, bool value)
+{
     this->x = x;
     this->y = y;
-    this->constant = false;
+    this->value = value;
 }
 
-Dead_Cell::Dead_Cell(int x, int y){
-    this->x = x;
-    this->y = y;
-    this->constant = false;
-}
+//Méthode
 
-void Dead_Cell::update(Grid *grid) {   
-    if (neighbours.x == 3) 
-    {
-        grid->invertCell(x, y);
-    }
+void constCell::update(Grid *grid)
+{
+    grid->invertConst(x, y);
 }

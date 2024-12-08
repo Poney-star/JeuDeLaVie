@@ -1,42 +1,44 @@
 #include "textBox.hpp"
 
-TextBox::TextBox(Game *game, sf::RenderWindow *window, sf::Sprite *sprite, sf::Font font) :
-game(game), 
-position(
-    sf::Vector2f(
-        sprite->getGlobalBounds().left,
-        sprite->getGlobalBounds().top
-    )
-),
-charLimit(80),
-sprite(sprite),
-text(sf::Text("", font)),
-cursorPos(0),
-window(window)
+TextBox::TextBox()
 {
-    text.setFillColor(sf::Color::White);
-    text.setPosition(position.x + 5, position.y + sprite->getGlobalBounds().height - text.getGlobalBounds().height);
+    position = sf::Vector2f(0, 0);
+    charLimit = 0;
+    sprite = nullptr;
+    text = nullptr;
+    cursorPos = 0;
+    focus = false;
 }
 
-void TextBox::display() const
+TextBox::TextBox(sf::Sprite* sprite, sf::Text* text, sf::Vector2f position) :
+position(position),
+charLimit(80),
+sprite(sprite),
+text(text),
+cursorPos(0),
+focus(false)
+{}
+
+void TextBox::draw(sf::RenderWindow* window) const
 {
     window->draw(*sprite);
-    window->draw(text);
+    window->draw(*text);
 }
 
 void TextBox::addChar(std::string str)
 {
-    text.setString(text.getString() + str);
+    if (charLimit > text->getString().getSize()) text->setString(text->getString() + str);
+    cursorPos += 1;
 }
 
 void TextBox::deleteChar()
 {
-    std::string str = text.getString();
+    std::string str = text->getString();
     str.erase(cursorPos, 1);
-    text.setString(str);
+    text->setString(str);
 }
 
-void TextBox::focusOn()
+/* void TextBox::focusOn()
 {
     while (focus)
     {
@@ -47,7 +49,6 @@ void TextBox::focusOn()
                 window->close();
                 break;
             case sf::Event::Resized:
-                game->resizeWindow(window->getSize().x,window->getSize().y);
                 break;
             case sf::Event::KeyPressed:
                     switch(event.key.code)  
@@ -62,14 +63,9 @@ void TextBox::focusOn()
                     break;
         }    
     }
-}
+} */
 
 void TextBox::changeFocusState()
 {
-    focus != focus;
-}
-
-std::string TextBox::getString() const
-{
-    return text.getString();
+    focus = !focus;
 }

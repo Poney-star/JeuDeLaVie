@@ -3,39 +3,36 @@
 
 #include <SFML/Graphics.hpp>
 #include "cell.hpp"
+#include "graphicsManager.hpp"
+
+class GraphicsManager;
 
 class Cell;
 
 class Grid {
 private:
-    std::vector<std::vector<Cell*>> elements;       // Liste contenant toutes les cellules
-    int width;                                      // Largeur de la grille
-    int height;                                     // Hauteur de la grille
-    static sf::Texture deadCellTexture, aliveCellTexture, constDeadCellTexture, constAliveCellTexture;
-    static int genNumber;                           // Numéro de la itération actuelle
+    std::vector<Cell*> elements;
+    int width;
+    int height;
+    int genNumber;
 
 public:
-    // Constructeur et destructeur
+    // Constructeur / destructeur
     Grid(int width, int height);
     ~Grid();
 
-    // Méthodes principales
-    bool loadTextures();
+    // Méthodes
     void setSize(int width, int height);
-    void clear();                                       // Nettoyer la grille
-    void endInit();
-    void addLine(std::vector<Cell*>);                   // Ajoute une ligne à la grille
-    sf::Vector2i getNeighbours(Cell* element);    // Obtenir les voisins
-    void nextGen();                                     // Calculer la prochaine itération
-    void display(sf::RenderWindow* window);             // Afficher la grille (mode graphique)
-    void invertCell(int x, int y);                      // Inverser l'état d'une cellule
-    void setConstant(int x, int y);                     // Définir une cellule comme constante
-    void resizeSprites(int cellWidth, int cellHeight);  // Redimensionner les sprites
-    sf::Vector2i getSpriteBounds();
+    void updateNeighbours();
+    void addLine(std::vector<Cell*>);
+    int getNeighbours(int x, int y);
+    void nextGen();
+    void invertConst(int x, int y, GraphicsManager* renderer);
+    void invertValue(int x, int y, GraphicsManager* renderer);
     std::vector<int> getLine(int lineNumber);
 
     // Accesseur pour la itération actuelle
-    static int getGenNumber();
+    int getGenNumber();
     int getHeight() const;
 };
 
