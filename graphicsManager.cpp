@@ -91,12 +91,16 @@ bool GraphicsManager::loadAssets()
     texts["settingsButton"] = sf::Text("Parametres", fonts["menu_button"], 20);
     texts["quitButton"] = sf::Text("Quitter", fonts["menuButton"], 20);
     texts["path"] = sf::Text("",fonts["userEntry"], 16);
+    texts["path"].setPosition(400.f, 100.f);
+    texts["genNumber"] = sf::Text("",fonts["userEntry"], 16);
+    texts["genNumber"].setPosition(400.f, 200.f);
     texts["consoleButton"] = sf::Text("Console",fonts["menuButton"], 20);
     texts["graphicButton"] = sf::Text("Graphique",fonts["menuButton"], 20);
     texts["checkFile"] = sf::Text("Verifier",fonts["menuButton"], 20);
 
     //TextBoxes
     textBoxes["path"] = TextBox(&sprites["pathBox"], &texts["path"], sf::Vector2f(400.f, 100.f));
+    textBoxes["genNumber"] = TextBox(&sprites["genNumberBox"], &texts["genNumber"], sf::Vector2f(400.f, 200.f));
 
     //Boutons
     buttons["startButton"]= Button(200.f, 100.f, 200.f, 50.f, sf::Color(200, 200, 200), sf::Color(150, 150, 150), sf::Color(100, 100, 100));
@@ -125,6 +129,9 @@ void GraphicsManager::renderStartMenu()
         &buttons["settingsButton"],
         &buttons["quitButton"]
     };
+    while(window.isOpen() && ){
+        gM.display();
+    }
 }
 
 void GraphicsManager::renderSFAMMenu()
@@ -149,9 +156,10 @@ bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
     if(buttons["consoleButton"].isHovered(mousePos))
     {
         Game game = Game();
+        if (stoi(textBoxes["genNumber"].getString())) game.setGenMax(stoi(textBoxes["genNumber"].getString()));
         if (game.loadFile(textBoxes["path"].getString())) game.console();
-        return 1;
         window.close();
+        return 1;
     } else if (buttons["graphicButton"].isHovered(mousePos))
     {
         Game game = Game();
@@ -168,14 +176,15 @@ bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
 
 void GraphicsManager::renderGame(Game* game)
 {
-    
+    toCheck = {}
+    game->graphic(&window);
 }
-//RESTE A GERER LE RESIZE EVENT
-void GraphicsManager::display()
+
+void GraphicsManager::handleEvents()
 {
     sf::Event event;
     sf::Vector2f scaleFactor;
-    window.waitEvent(event);
+    window.pollEvent(event);
     switch (event.type)
     {
         case sf::Event::Closed:
@@ -189,9 +198,14 @@ void GraphicsManager::display()
             cursor.updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
             break;
         case sf::Event::KeyPressed:
-            switch(event.key.code)  
+            if (textBoxes["path"].getFocusState())
+            {
+                switch(event.key.code)  
                 {
                     case sf::Keyboard::Escape:
+                        textBoxes["path"].changeFocusState();
+                        break;
+                    case sf::Keyboard::Enter:
                         textBoxes["path"].changeFocusState();
                         break;
                     case sf::Keyboard::Backspace:
@@ -217,13 +231,105 @@ void GraphicsManager::display()
                         textBoxes["path"].addChar(sf::Keyboard::getDescription(event.key.scancode));
                         break;
                 }
+            } else if (textBoxes["genNumber"].getFocusState()){
+                switch(event.key.code)  
+                {
+                    case sf::Keyboard::Escape:
+                        textBoxes["genNumber"].changeFocusState();
+                        break;
+                    case sf::Keyboard::Enter:
+                        textBoxes["genNumber"].changeFocusState();
+                        break;
+                    case sf::Keyboard::Backspace:
+                        textBoxes["genNumber"].deleteChar();
+                        break;
+                    case sf::Keyboard::Left:
+                        textBoxes["genNumber"].moveCursor(-1);
+                        break;
+                    case sf::Keyboard::Right:
+                        textBoxes["genNumber"].moveCursor(1);
+                        break;
+                    case sf::Keyboard::Num0:
+                        textBoxes["genNumber"].addChar("0");
+                        break;
+                    case sf::Keyboard::Numpad0:
+                        textBoxes["genNumber"].addChar("0");
+                        break;
+                    case sf::Keyboard::Num1:
+                        textBoxes["genNumber"].addChar("1");
+                        break;
+                    case sf::Keyboard::Numpad1:
+                        textBoxes["genNumber"].addChar("1");
+                        break;
+                    case sf::Keyboard::Num2:
+                        textBoxes["genNumber"].addChar("2");
+                        break;
+                    case sf::Keyboard::Numpad2:
+                        textBoxes["genNumber"].addChar("2");
+                        break;
+                    case sf::Keyboard::Num3:
+                        textBoxes["genNumber"].addChar("3");
+                        break;
+                    case sf::Keyboard::Numpad3:
+                        textBoxes["genNumber"].addChar("3");
+                        break;
+                    case sf::Keyboard::Num4:
+                        textBoxes["genNumber"].addChar("4");
+                        break;
+                    case sf::Keyboard::Numpad4:
+                        textBoxes["genNumber"].addChar("4");
+                        break;
+                    case sf::Keyboard::Num5:
+                        textBoxes["genNumber"].addChar("5");
+                        break;
+                    case sf::Keyboard::Numpad5:
+                        textBoxes["genNumber"].addChar("5");
+                        break;
+                    case sf::Keyboard::Num6:
+                        textBoxes["genNumber"].addChar("6");
+                        break;
+                    case sf::Keyboard::Numpad6:
+                        textBoxes["genNumber"].addChar("6");
+                        break;
+                    case sf::Keyboard::Num7:
+                        textBoxes["genNumber"].addChar("7");
+                        break;
+                    case sf::Keyboard::Numpad7:
+                        textBoxes["genNumber"].addChar("7");
+                        break;
+                    case sf::Keyboard::Num8:
+                        textBoxes["genNumber"].addChar("8");
+                        break;
+                    case sf::Keyboard::Numpad8:
+                        textBoxes["genNumber"].addChar("8");
+                        break;
+                    case sf::Keyboard::Num9:
+                        textBoxes["genNumber"].addChar("9");
+                        break;
+                    case sf::Keyboard::Numpad9:
+                        textBoxes["genNumber"].addChar("9");
+                        break;
+                    default:
+                        break;
+                }
+            }
             break;
         case sf::Event::MouseButtonPressed:
             if(sprites["pathBox"].getGlobalBounds().contains(cursor.getPosition().x, cursor.getPosition().y) && !textBoxes["path"].getFocusState())
             {
                 textBoxes["path"].changeFocusState();
                 toCheck.push_back(&textBoxes["path"]);
-            } else if (textBoxes["path"].getFocusState()){
+            } else if (textBoxes["path"].getFocusState())
+            {
+                textBoxes["path"].changeFocusState();
+                toCheck.pop_back();
+                buttonActivatedSFAMMenu(cursor.getPosition());
+            } else if (sprites["genNumber"].getGlobalBounds().contains(cursor.getPosition().x, cursor.getPosition().y) && !textBoxes["genNumber"].getFocusState())
+            {
+                textBoxes["genNumber"].changeFocusState();
+                toCheck.push_back(&textBoxes["genNumber"]);
+            } else if (textBoxes["genNumber"].getFocusState())
+            {
                 textBoxes["path"].changeFocusState();
                 toCheck.pop_back();
                 buttonActivatedSFAMMenu(cursor.getPosition());
@@ -231,6 +337,10 @@ void GraphicsManager::display()
         default:
             break;
     }
+}
+
+void GraphicsManager::display()
+{
     for (const auto& item : toCheck) {
         std::visit([this, scaleFactor](const auto& value) {
             if constexpr (std::is_same_v<std::decay_t<decltype(value)>, sf::Sprite*>)
@@ -245,10 +355,7 @@ void GraphicsManager::display()
             } else if constexpr (std::is_same_v<std::decay_t<decltype(value)>, Button*>)
             {
                 value->update(cursor.getPosition(), &window);
-            } else if constexpr (std::is_same_v<std::decay_t<decltype(value)>, Cell*>)
-            {
-                
-            } 
+            }
         }, item);
     }
     window.display();
@@ -257,4 +364,52 @@ void GraphicsManager::display()
 void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*> obj)
 {
     toCheck.push_back(obj);
+}
+
+void GraphicsManager::displayGameCells()
+{
+    for (const auto& item : toCheck) {
+        std::visit([this](const auto& value) {
+            if constexpr (std::is_same_v<std::decay_t<decltype(value)>, mutableCell*>)
+            {
+                if (value->getValue())
+                {
+                    sprites["aliveCell"].setPosition(
+                        sf::Vector2f(
+                            value->getX()*sprites["aliveCell"].getGlobalBounds().width,
+                            value->getY()*sprites["aliveCell"].getGlobalBounds().height
+                        )
+                    );
+                    window.draw(sprites["aliveCell"]);
+                } else {
+                    sprites["deadCell"].setPosition(
+                        sf::Vector2f(
+                            value->getX()*sprites["deadCell"].getGlobalBounds().width,
+                            value->getY()*sprites["deadCell"].getGlobalBounds().height
+                        )
+                    );
+                    window.draw(sprites["deadCell"]);
+                }
+            } else {
+                if (value->getValue())
+                {
+                    sprites["constAliveCell"].setPosition(
+                        sf::Vector2f(
+                            value->getX()*sprites["constAliveCell"].getGlobalBounds().width,
+                            value->getY()*sprites["constAliveCell"].getGlobalBounds().height
+                        )
+                    );
+                    window.draw(sprites["constAliveCell"]);
+                } else {
+                    sprites["constDeadCell"].setPosition(
+                        sf::Vector2f(
+                            value->getX()*sprites["constDeadCell"].getGlobalBounds().width,
+                            value->getY()*sprites["constDeadCell"].getGlobalBounds().height
+                        )
+                    );
+                    window.draw(sprites["constDeadCell"]);
+                }
+            }
+        }, item);
+    }
 }

@@ -45,7 +45,9 @@ public:
     void renderSFAMMenu(); //render SFAM (Select File And Mode) Menu
     void renderGame(Game* game);
     void display();
+    void displayGameCells();
     // Autres
+    void handleEvents();
     bool buttonActivatedSFAMMenu(sf::Vector2i mousePos);
     bool loadAssets();
     void addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*> obj);

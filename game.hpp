@@ -19,10 +19,11 @@ private:
     GraphicsManager* renderer;
     Grid* grid; 
     bool running;
-    int interval;
+    std::chrono::seconds interval;
     int genMax;
 public:
     Game();
+    void setGenMax(int nb);
     void console();
     void graphic(sf::RenderWindow* window);
     void display() const;

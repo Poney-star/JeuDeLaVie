@@ -3,9 +3,12 @@
 Game::Game()
 {
     grid = new Grid(0,0);
-    interval = 2000;
+    interval = std::chrono::seconds(1);
 }
-
+void Game::setGenMax(int nb)
+{
+    genMax = nb;
+}
 void Game::setConstantCell(sf::Vector2i coordinates) const
 {
     sf::FloatRect shapeBounds = renderer->getSprite("aliveCell")->getGlobalBounds();
@@ -37,16 +40,16 @@ void Game::console()
 
 void Game::graphic(sf::RenderWindow* window)
 {
-    int timer;
-    while (renderer->getWindow()->isOpen())
+    int start = std::chrono::system_clock::now();
+    while (window->isOpen())
     {
         sf::Event event;
-        while (renderer->getWindow()->pollEvent(event))
+        while (window->pollEvent(event))
         {
             switch(event.type)
             {
                 case sf::Event::Closed:
-                    renderer->getWindow()->close();
+                    window->close();
                     break;
                 case sf::Event::Resized:
                     break;
@@ -54,7 +57,7 @@ void Game::graphic(sf::RenderWindow* window)
                     renderer->getCursor()->clicOnCell(&event, this);
                     break;
                 case sf::Event::MouseMoved:
-                    renderer->getCursor()->updatePosition(event.mouseMove.x, event.mouseMove.y);
+                    renderer->getCursor()->updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
                     break;
                 case sf::Event::KeyPressed:
                     switch(event.key.code)  
@@ -72,12 +75,14 @@ void Game::graphic(sf::RenderWindow* window)
                 default:
                     break;
             }
-            if (running && timer == interval)
+            int timer = std::chrono::system_clock::now();
+            if (running && timer - start >= interval)
             {
-                renderer->getWindow()->display();
                 grid->nextGen();
+                renderer->displayGameCells();
+                int start = timer;
             } else {
-                timer = interval;
+                window->display();
             }
         }
     }
