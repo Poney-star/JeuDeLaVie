@@ -24,7 +24,7 @@ public:
     // Méthodes
     void setSize(int width, int height);
     void updateNeighbours();
-    void addLine(std::vector<Cell*>);
+    void addLine(std::vector<Cell*>, GraphicsManager* renderer);
     int getNeighbours(int x, int y);
     void nextGen();
     void invertConst(int x, int y, GraphicsManager* renderer);
@@ -32,8 +32,10 @@ public:
     std::vector<int> getLine(int lineNumber);
 
     // Accesseur pour la itération actuelle
-    int getGenNumber();
+    int getGenNumber() const;
     int getHeight() const;
+    int getWidth() const;
+    std::vector<Cell*> getElements();
 };
 
 #endif // GRID_H

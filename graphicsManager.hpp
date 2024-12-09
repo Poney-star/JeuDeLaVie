@@ -14,6 +14,10 @@
 
 class Cell;
 
+class mutableCell;
+
+class constCell;
+
 class GraphicsManager
 {
 private:
@@ -26,7 +30,7 @@ private:
     std::map<std::string, sf::Text> texts;
     std::map<std::string, TextBox> textBoxes;
     std::map<std::string, Button> buttons;
-    std::vector<std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*>> toCheck;
+    std::vector<std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, mutableCell*, constCell*, Cell*>> toCheck;
 
 public:
     // Constructeur / Destructeur
@@ -45,12 +49,13 @@ public:
     void renderSFAMMenu(); //render SFAM (Select File And Mode) Menu
     void renderGame(Game* game);
     void display();
-    void displayGameCells();
+    void displayGameCells(Grid* grid);
     // Autres
     void handleEvents();
+    void buttonActivatedMenu(sf::Vector2i);
     bool buttonActivatedSFAMMenu(sf::Vector2i mousePos);
     bool loadAssets();
-    void addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*> obj);
+    void addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, mutableCell*, constCell*, Cell*> obj);
 };
 
 #endif

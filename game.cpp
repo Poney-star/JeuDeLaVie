@@ -40,7 +40,7 @@ void Game::console()
 
 void Game::graphic(sf::RenderWindow* window)
 {
-    int start = std::chrono::system_clock::now();
+    std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
     while (window->isOpen())
     {
         sf::Event event;
@@ -57,7 +57,7 @@ void Game::graphic(sf::RenderWindow* window)
                     renderer->getCursor()->clicOnCell(&event, this);
                     break;
                 case sf::Event::MouseMoved:
-                    renderer->getCursor()->updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
+                    renderer->getCursor()->updatePosition(sf::Mouse::getPosition(*window).x,sf::Mouse::getPosition(*window).y);
                     break;
                 case sf::Event::KeyPressed:
                     switch(event.key.code)  
@@ -75,12 +75,12 @@ void Game::graphic(sf::RenderWindow* window)
                 default:
                     break;
             }
-            int timer = std::chrono::system_clock::now();
+            std::chrono::system_clock::time_point timer = std::chrono::system_clock::now();
             if (running && timer - start >= interval)
             {
                 grid->nextGen();
-                renderer->displayGameCells();
-                int start = timer;
+                renderer->displayGameCells(grid);
+                start = timer;
             } else {
                 window->display();
             }
@@ -108,7 +108,6 @@ bool Game::loadFile(const std::string filename){
     unsigned int width, height;
     file >> height; 
     file >> width;
-    file.ignore();
     if (!((width > 1 && height > 1) && file.get() == (char)10)) {
         width = 0;
         height = 0;
@@ -118,6 +117,7 @@ bool Game::loadFile(const std::string filename){
         {
             if(std::count(line.begin(), line.end(), ' ') + 1 > width) width = std::count(line.begin(), line.end(), ' ') + 1;
         }
+        y = 0;
         file.ignore();
         file.clear();
         file.seekg(0,std::ios::beg);
@@ -150,14 +150,14 @@ bool Game::loadFile(const std::string filename){
                     break;
                 case '\n':
                     x = 0;
-                    (row.size() + 1 == width) ? grid->addLine(row) : grid->addLine(resizeLine(width, row, x, y));
+                    (row.size() + 1 == width) ? grid->addLine(row, renderer) : grid->addLine(resizeLine(width, row, x, y), renderer);
                     y++;
                     row = {};
                     break;
             }
         }
-    }
-    (row.size() + 1 == width) ? grid->addLine(row) : grid->addLine(this->resizeLine(width, row, x, y));
+    }      
+    (row.size() + 1 == width) ? grid->addLine(row, renderer) : grid->addLine(this->resizeLine(width, row, x, y), renderer);
     file.close();
     while (height - 1 > y)
     {
@@ -168,7 +168,7 @@ bool Game::loadFile(const std::string filename){
             row.push_back(new mutableCell(x, y, 0));
             x++;
         }
-        grid->addLine(row);
+        grid->addLine(row, renderer);
     }
     grid->updateNeighbours();
     return 1;

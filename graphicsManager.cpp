@@ -77,6 +77,9 @@ bool GraphicsManager::loadAssets()
     sprites["pathBox"] = sf::Sprite(textures["menuBackground"],sf::IntRect(400.f, 100.f, 200, 50));
     sprites["pathBox"].setPosition(400.F, 100.F);
     sprites["pathBox"].setColor(sf::Color(0, 0, 0, 172));
+    sprites["genNumberBox"] = sf::Sprite(textures["menuBackground"],sf::IntRect(400.f, 150.f, 200, 50));
+    sprites["genNumberBox"].setPosition(400.F, 175.F);
+    sprites["genNumberBox"].setColor(sf::Color(0, 0, 0, 172));
 
     //Polices
     if (!fonts["title"].loadFromFile("assets/fonts/title-font.ttf")) return false;
@@ -88,19 +91,19 @@ bool GraphicsManager::loadAssets()
     texts["menuTitle"].setFillColor(sf::Color::White);
     texts["menuTitle"].setPosition(window.getSize().x / 2 -  texts["menuTitle"].getGlobalBounds().width / 2, 19);
     texts["startButton"] = sf::Text("Jouer", fonts["menuButton"], 20);
-    texts["settingsButton"] = sf::Text("Parametres", fonts["menu_button"], 20);
+    texts["settingsButton"] = sf::Text("Param", fonts["menu_button"], 20);
     texts["quitButton"] = sf::Text("Quitter", fonts["menuButton"], 20);
     texts["path"] = sf::Text("",fonts["userEntry"], 16);
-    texts["path"].setPosition(400.f, 100.f);
-    texts["genNumber"] = sf::Text("",fonts["userEntry"], 16);
-    texts["genNumber"].setPosition(400.f, 200.f);
+    texts["path"].setPosition(405.f, 103.f);
+    texts["genNumber"] = sf::Text("5",fonts["userEntry"], 16);
+    texts["genNumber"].setPosition(405.f, 178.f);
     texts["consoleButton"] = sf::Text("Console",fonts["menuButton"], 20);
     texts["graphicButton"] = sf::Text("Graphique",fonts["menuButton"], 20);
     texts["checkFile"] = sf::Text("Verifier",fonts["menuButton"], 20);
 
     //TextBoxes
     textBoxes["path"] = TextBox(&sprites["pathBox"], &texts["path"], sf::Vector2f(400.f, 100.f));
-    textBoxes["genNumber"] = TextBox(&sprites["genNumberBox"], &texts["genNumber"], sf::Vector2f(400.f, 200.f));
+    textBoxes["genNumber"] = TextBox(&sprites["genNumberBox"], &texts["genNumber"], sf::Vector2f(400.f, 175.f));
 
     //Boutons
     buttons["startButton"]= Button(200.f, 100.f, 200.f, 50.f, sf::Color(200, 200, 200), sf::Color(150, 150, 150), sf::Color(100, 100, 100));
@@ -129,8 +132,25 @@ void GraphicsManager::renderStartMenu()
         &buttons["settingsButton"],
         &buttons["quitButton"]
     };
-    while(window.isOpen() && ){
-        gM.display();
+    while(window.isOpen()){
+        sf::Event event;
+        window.pollEvent(event);
+        switch (event.type)
+        {
+            case sf::Event::Closed:
+            window.close();
+            break;
+            case sf::Event::Resized:
+                window.setView(sf::View(sf::FloatRect(0,0,event.size.width,event.size.height)));
+                break;
+            case sf::Event::MouseMoved: 
+                cursor.updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
+                break;
+            case sf::Event::MouseButtonPressed:
+                buttonActivatedMenu(cursor.getPosition());
+                break;
+        }
+        display();
     }
 }
 
@@ -139,24 +159,40 @@ void GraphicsManager::renderSFAMMenu()
     toCheck = {
         &sprites["menuBackground"],
         &textBoxes["path"],
+        &textBoxes["genNumber"],
         &buttons["consoleButton"],
         &buttons["graphicButton"],
         &buttons["checkFile"]
     };
+    while(window.isOpen())
+    {
+        handleEvents();
+        display();
+    }
+}
 
+void GraphicsManager::buttonActivatedMenu(sf::Vector2i mousePos)
+{
+    if(buttons["startButton"].isHovered(mousePos))
+    {
+        renderSFAMMenu();
+    } else if (buttons["settingsButton"].isHovered(mousePos)){
+
+    } else if ((buttons["quitButton"].isHovered(mousePos))){
+        window.close();
+    }
 }
 
 bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
 {
     std::ifstream file(textBoxes["path"].getString());
     if (!file) {
-        std::cout<<"fail"<<std::endl;
         return 0;
     }
     if(buttons["consoleButton"].isHovered(mousePos))
     {
         Game game = Game();
-        if (stoi(textBoxes["genNumber"].getString())) game.setGenMax(stoi(textBoxes["genNumber"].getString()));
+        (stoi(textBoxes["genNumber"].getString())) ? game.setGenMax(stoi(textBoxes["genNumber"].getString())) : game.setGenMax(5) ;
         if (game.loadFile(textBoxes["path"].getString())) game.console();
         window.close();
         return 1;
@@ -167,16 +203,16 @@ bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
         return 1;
     } else if (buttons["checkFile"].isHovered(mousePos))
     {
-        Game game = Game();
-        if (game.loadFile(textBoxes["path"].getString())) return 1;
-        return 0;
+        std::ifstream file(textBoxes["path"].getString());
+        if (!file) return 0;
+        return 1;
     }
     return 0;
 }
 
 void GraphicsManager::renderGame(Game* game)
 {
-    toCheck = {}
+    toCheck = {};
     game->graphic(&window);
 }
 
@@ -315,6 +351,16 @@ void GraphicsManager::handleEvents()
             }
             break;
         case sf::Event::MouseButtonPressed:
+            if (sprites["genNumberBox"].getGlobalBounds().contains(cursor.getPosition().x, cursor.getPosition().y) && !textBoxes["genNumber"].getFocusState())
+            {
+                textBoxes["genNumber"].changeFocusState();
+                toCheck.push_back(&textBoxes["genNumber"]);
+            } else if (textBoxes["genNumber"].getFocusState())
+            {
+                textBoxes["genNumber"].changeFocusState();
+                toCheck.pop_back();
+                buttonActivatedSFAMMenu(cursor.getPosition());
+            }
             if(sprites["pathBox"].getGlobalBounds().contains(cursor.getPosition().x, cursor.getPosition().y) && !textBoxes["path"].getFocusState())
             {
                 textBoxes["path"].changeFocusState();
@@ -324,16 +370,9 @@ void GraphicsManager::handleEvents()
                 textBoxes["path"].changeFocusState();
                 toCheck.pop_back();
                 buttonActivatedSFAMMenu(cursor.getPosition());
-            } else if (sprites["genNumber"].getGlobalBounds().contains(cursor.getPosition().x, cursor.getPosition().y) && !textBoxes["genNumber"].getFocusState())
-            {
-                textBoxes["genNumber"].changeFocusState();
-                toCheck.push_back(&textBoxes["genNumber"]);
-            } else if (textBoxes["genNumber"].getFocusState())
-            {
-                textBoxes["path"].changeFocusState();
-                toCheck.pop_back();
-                buttonActivatedSFAMMenu(cursor.getPosition());
             }
+            buttonActivatedSFAMMenu(cursor.getPosition());
+            break;
         default:
             break;
     }
@@ -342,7 +381,7 @@ void GraphicsManager::handleEvents()
 void GraphicsManager::display()
 {
     for (const auto& item : toCheck) {
-        std::visit([this, scaleFactor](const auto& value) {
+        std::visit([this](const auto& value) {
             if constexpr (std::is_same_v<std::decay_t<decltype(value)>, sf::Sprite*>)
             {
                 window.draw(*value);
@@ -361,55 +400,52 @@ void GraphicsManager::display()
     window.display();
 }
 
-void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, Cell*> obj)
+void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, mutableCell*, constCell*, Cell*> obj)
 {
     toCheck.push_back(obj);
 }
 
-void GraphicsManager::displayGameCells()
+void GraphicsManager::displayGameCells(Grid* grid)
 {
-    for (const auto& item : toCheck) {
-        std::visit([this](const auto& value) {
-            if constexpr (std::is_same_v<std::decay_t<decltype(value)>, mutableCell*>)
-            {
-                if (value->getValue())
-                {
-                    sprites["aliveCell"].setPosition(
-                        sf::Vector2f(
-                            value->getX()*sprites["aliveCell"].getGlobalBounds().width,
-                            value->getY()*sprites["aliveCell"].getGlobalBounds().height
-                        )
-                    );
-                    window.draw(sprites["aliveCell"]);
-                } else {
-                    sprites["deadCell"].setPosition(
-                        sf::Vector2f(
-                            value->getX()*sprites["deadCell"].getGlobalBounds().width,
-                            value->getY()*sprites["deadCell"].getGlobalBounds().height
-                        )
-                    );
-                    window.draw(sprites["deadCell"]);
-                }
-            } else {
-                if (value->getValue())
-                {
-                    sprites["constAliveCell"].setPosition(
-                        sf::Vector2f(
-                            value->getX()*sprites["constAliveCell"].getGlobalBounds().width,
-                            value->getY()*sprites["constAliveCell"].getGlobalBounds().height
-                        )
-                    );
-                    window.draw(sprites["constAliveCell"]);
-                } else {
-                    sprites["constDeadCell"].setPosition(
-                        sf::Vector2f(
-                            value->getX()*sprites["constDeadCell"].getGlobalBounds().width,
-                            value->getY()*sprites["constDeadCell"].getGlobalBounds().height
-                        )
-                    );
-                    window.draw(sprites["constDeadCell"]);
-                }
-            }
-        }, item);
+    std::vector<Cell*> cells = grid->getElements();
+    sf::RectangleShape rectangle;
+
+    // Définir les propriétés du rectangle
+    rectangle.setOutlineThickness(2);
+    rectangle.setOutlineColor(sf::Color::White);
+    rectangle.setFillColor(sf::Color::White);
+
+    // Taille du rectangle basée sur la taille de la fenêtre et de la grille
+    rectangle.setSize(sf::Vector2f(
+        window.getSize().x / grid->getWidth(),
+        window.getSize().y / grid->getHeight()
+    ));
+
+    // Dessiner chaque cellule
+    for (auto* cell : cells) {
+        if (auto* mutable_cell = dynamic_cast<mutableCell*>(cell)) {
+            // Cellule mutable
+            rectangle.setPosition(
+                mutable_cell->getX() * rectangle.getGlobalBounds().width,
+                mutable_cell->getY() * rectangle.getGlobalBounds().height
+            );
+            rectangle.setFillColor(mutable_cell->getValue() ? sf::Color::Blue : sf::Color::Yellow);
+        } else if (auto* const_cell = dynamic_cast<constCell*>(cell)) {
+            // Cellule constante
+            rectangle.setPosition(
+                const_cell->getX() * rectangle.getGlobalBounds().width,
+                const_cell->getY() * rectangle.getGlobalBounds().height
+            );
+            rectangle.setFillColor(const_cell->getValue() ? sf::Color::Red : sf::Color::Green);
+        } else {
+            // Si le pointeur n'est ni mutableCell ni constCell (erreur possible)
+            std::cerr << "Erreur : Cell* non reconnu !" << std::endl;
+            continue;
+        }
+        window.draw(rectangle);
     }
+
+    // Afficher tout le contenu dessiné
+    window.display();
+
 }

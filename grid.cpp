@@ -29,7 +29,7 @@ int Grid::getNeighbours(int x, int y) {
     int neighbours = 0;
     if (elements[(y - 1 < 0 ? height - 1 : y - 1 ) * width + (x - 1 < 0 ? width - 1 : x -  1)]->getValue() == true) neighbours += 1;
     if (elements[y * width + (x - 1 < 0 ? width - 1 : x -  1)]->getValue() == true) neighbours += 1;
-    if (elements[((y+1)%height) * width + x - 1 < 0 ? width - 1 : x -  1]->getValue() == true) neighbours += 1;
+    if (elements[((y+1)%height) * width + (x - 1 < 0 ? width - 1 : x -  1)]->getValue() == true) neighbours += 1;
     if (elements[(y - 1 < 0 ? height - 1 : y - 1) * width + x]->getValue() == true) neighbours += 1;
     if (elements[((y+1)%height) * width + x]->getValue() == true) neighbours += 1;
     if (elements[(y - 1 < 0 ? height - 1: y - 1) * width + ((x+1)%width)]->getValue() == true) neighbours += 1;
@@ -54,7 +54,7 @@ void Grid::nextGen()
 void Grid::invertValue(int x, int y, GraphicsManager* renderer)
 {
     elements[y * width + x]->invertValue();
-    renderer->addToCheck(elements[y * width + x]);
+    renderer->addToCheck(elements[y * (width - 1) + x]);
 }
 
 // Méthode pour inverser l'état d'une cellule (vivant/mort)
@@ -70,8 +70,8 @@ void Grid::invertConst(int x, int y, GraphicsManager* renderer)
     renderer->addToCheck(elements[y * width + x]);
 }
 
-// Accesseur pour l'itération actuelle
-int Grid::getGenNumber()
+// Accesseurs pour l'itération actuelle
+int Grid::getGenNumber() const
 {
     return genNumber;
 }
@@ -79,6 +79,16 @@ int Grid::getGenNumber()
 int Grid::getHeight() const
 {
     return height;
+}
+
+int Grid::getWidth() const
+{
+    return width;
+}
+
+std::vector<Cell*> Grid::getElements()
+{
+    return elements;
 }
 
 void Grid::updateNeighbours()
@@ -102,7 +112,7 @@ std::vector<int> Grid::getLine(int lineNumber)
     return line;
 }
 
-void Grid::addLine(std::vector<Cell*> line)
+void Grid::addLine(std::vector<Cell*> line, GraphicsManager* renderer)
 {
     for(Cell* cell : line)
     {
