@@ -42,8 +42,14 @@ void Button::setText(sf::Text* text)
 
 void Button::setScale(sf::Vector2f scaleFactor)
 {
-    shape.setOrigin(scaleFactor.x * position.x, scaleFactor.y * position.x);
+    shape.setScale(scaleFactor);
     buttonText->setScale(scaleFactor);
+}
+
+void Button::setScale(float x, float y)
+{
+    shape.setScale(x, y);
+    buttonText->setScale(x, y);
 }
 
 void Button::update(sf::Vector2i mousePos, sf::RenderWindow* ctx) {
@@ -55,7 +61,7 @@ void Button::update(sf::Vector2i mousePos, sf::RenderWindow* ctx) {
     } else {
         shape.setFillColor(idleColor);            
     }
-    ctx->draw(shape); 
+    ctx->draw(shape);
     ctx->draw(*buttonText); 
 }
 

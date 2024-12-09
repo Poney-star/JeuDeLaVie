@@ -91,9 +91,9 @@ bool GraphicsManager::loadAssets()
     texts["menuTitle"].setFillColor(sf::Color::White);
     texts["menuTitle"].setPosition(window.getSize().x / 2 -  texts["menuTitle"].getGlobalBounds().width / 2, 19);
     texts["startButton"] = sf::Text("Jouer", fonts["menuButton"], 20);
-    texts["settingsButton"] = sf::Text("Param", fonts["menu_button"], 20);
+    texts["settingsButton"] = sf::Text("Param", fonts["menuButton"], 20);
     texts["quitButton"] = sf::Text("Quitter", fonts["menuButton"], 20);
-    texts["path"] = sf::Text("",fonts["userEntry"], 16);
+    texts["path"] = sf::Text("test.txt",fonts["userEntry"], 16);
     texts["path"].setPosition(405.f, 103.f);
     texts["genNumber"] = sf::Text("5",fonts["userEntry"], 16);
     texts["genNumber"].setPosition(405.f, 178.f);
@@ -142,6 +142,10 @@ void GraphicsManager::renderStartMenu()
             break;
             case sf::Event::Resized:
                 window.setView(sf::View(sf::FloatRect(0,0,event.size.width,event.size.height)));
+                sprites["menuBackground"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
+                buttons["startButton"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
+                buttons["settingsButton"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
+                buttons["quitButton"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
                 break;
             case sf::Event::MouseMoved: 
                 cursor.updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
@@ -183,37 +187,31 @@ void GraphicsManager::buttonActivatedMenu(sf::Vector2i mousePos)
     }
 }
 
-bool GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
+void GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
 {
     std::ifstream file(textBoxes["path"].getString());
     if (!file) {
-        return 0;
     }
     if(buttons["consoleButton"].isHovered(mousePos))
     {
-        Game game = Game();
-        (stoi(textBoxes["genNumber"].getString())) ? game.setGenMax(stoi(textBoxes["genNumber"].getString())) : game.setGenMax(5) ;
-        if (game.loadFile(textBoxes["path"].getString())) game.console();
+        Game* game = new Game(this);
+        (stoi(textBoxes["genNumber"].getString())) ? game->setGenMax(stoi(textBoxes["genNumber"].getString())) : game->setGenMax(5) ;
+        if (game->loadFile(textBoxes["path"].getString())) game->console();
         window.close();
-        return 1;
     } else if (buttons["graphicButton"].isHovered(mousePos))
     {
-        Game game = Game();
-        if (game.loadFile(textBoxes["path"].getString())) renderGame(&game);
-        return 1;
+        Game* game = new Game(this);
+        if (game->loadFile(textBoxes["path"].getString())) renderGame(game);
     } else if (buttons["checkFile"].isHovered(mousePos))
     {
-        std::ifstream file(textBoxes["path"].getString());
-        if (!file) return 0;
-        return 1;
+        
     }
-    return 0;
 }
 
 void GraphicsManager::renderGame(Game* game)
 {
     toCheck = {};
-    game->graphic(&window);
+    game->graphic();
 }
 
 void GraphicsManager::handleEvents()
@@ -408,44 +406,17 @@ void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, 
 void GraphicsManager::displayGameCells(Grid* grid)
 {
     std::vector<Cell*> cells = grid->getElements();
-    sf::RectangleShape rectangle;
+    sf::Vector2f cellSize(window.getSize().x/grid->getWidth(), window.getSize().y/grid->getHeight());
 
-    // Définir les propriétés du rectangle
-    rectangle.setOutlineThickness(2);
-    rectangle.setOutlineColor(sf::Color::White);
-    rectangle.setFillColor(sf::Color::White);
-
-    // Taille du rectangle basée sur la taille de la fenêtre et de la grille
-    rectangle.setSize(sf::Vector2f(
-        window.getSize().x / grid->getWidth(),
-        window.getSize().y / grid->getHeight()
-    ));
-
-    // Dessiner chaque cellule
-    for (auto* cell : cells) {
-        if (auto* mutable_cell = dynamic_cast<mutableCell*>(cell)) {
-            // Cellule mutable
-            rectangle.setPosition(
-                mutable_cell->getX() * rectangle.getGlobalBounds().width,
-                mutable_cell->getY() * rectangle.getGlobalBounds().height
-            );
-            rectangle.setFillColor(mutable_cell->getValue() ? sf::Color::Blue : sf::Color::Yellow);
-        } else if (auto* const_cell = dynamic_cast<constCell*>(cell)) {
-            // Cellule constante
-            rectangle.setPosition(
-                const_cell->getX() * rectangle.getGlobalBounds().width,
-                const_cell->getY() * rectangle.getGlobalBounds().height
-            );
-            rectangle.setFillColor(const_cell->getValue() ? sf::Color::Red : sf::Color::Green);
-        } else {
-            // Si le pointeur n'est ni mutableCell ni constCell (erreur possible)
-            std::cerr << "Erreur : Cell* non reconnu !" << std::endl;
-            continue;
-        }
+    for(int x = 0; x < cells.size();x++)
+    {
+        sf::RectangleShape rectangle(cellSize);
+        std::cout<<(x % grid->getWidth()) * cellSize.x << ", " << floor(x/grid->getWidth()) * cellSize.y << std::endl;
+        rectangle.setPosition((x % grid->getWidth()) * cellSize.x, floor(x/grid->getWidth()) * cellSize.y);
+        rectangle.setFillColor(cells[x]->getValue() ? sf::Color::White : sf::Color::Green);
+        rectangle.setOutlineColor(sf::Color::White);
+        rectangle.setOutlineThickness(2);
         window.draw(rectangle);
     }
-
-    // Afficher tout le contenu dessiné
     window.display();
-
 }

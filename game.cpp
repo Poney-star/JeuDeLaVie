@@ -1,9 +1,11 @@
 #include "game.hpp"
 
-Game::Game()
+Game::Game(GraphicsManager* gM)
 {
+    renderer = gM;
     grid = new Grid(0,0);
     interval = std::chrono::seconds(1);
+    running = true;
 }
 void Game::setGenMax(int nb)
 {
@@ -38,18 +40,18 @@ void Game::console()
     }
 }
 
-void Game::graphic(sf::RenderWindow* window)
+void Game::graphic()
 {
     std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-    while (window->isOpen())
+    while (renderer->getWindow()->isOpen())
     {
         sf::Event event;
-        while (window->pollEvent(event))
+        while (renderer->getWindow()->pollEvent(event))
         {
             switch(event.type)
             {
                 case sf::Event::Closed:
-                    window->close();
+                    renderer->getWindow()->close();
                     break;
                 case sf::Event::Resized:
                     break;
@@ -57,13 +59,13 @@ void Game::graphic(sf::RenderWindow* window)
                     renderer->getCursor()->clicOnCell(&event, this);
                     break;
                 case sf::Event::MouseMoved:
-                    renderer->getCursor()->updatePosition(sf::Mouse::getPosition(*window).x,sf::Mouse::getPosition(*window).y);
+                    renderer->getCursor()->updatePosition(sf::Mouse::getPosition(*renderer->getWindow()).x, sf::Mouse::getPosition(*renderer->getWindow()).y);
                     break;
                 case sf::Event::KeyPressed:
                     switch(event.key.code)  
                     {
                         case sf::Keyboard::Escape:
-                            this->pause();
+                            renderer->renderSFAMMenu();
                             break;
                         case sf::Keyboard::Space:
                             this->pause();
@@ -75,15 +77,13 @@ void Game::graphic(sf::RenderWindow* window)
                 default:
                     break;
             }
-            std::chrono::system_clock::time_point timer = std::chrono::system_clock::now();
-            if (running && timer - start >= interval)
-            {
-                grid->nextGen();
-                renderer->displayGameCells(grid);
-                start = timer;
-            } else {
-                window->display();
-            }
+        }
+        std::chrono::system_clock::time_point timer = std::chrono::system_clock::now();
+        if (running && timer - start >= interval)
+        {
+            grid->nextGen();
+            renderer->displayGameCells(grid);
+            start = timer;
         }
     }
 }

@@ -53,7 +53,7 @@ public:
     // Autres
     void handleEvents();
     void buttonActivatedMenu(sf::Vector2i);
-    bool buttonActivatedSFAMMenu(sf::Vector2i mousePos);
+    void buttonActivatedSFAMMenu(sf::Vector2i mousePos);
     bool loadAssets();
     void addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, mutableCell*, constCell*, Cell*> obj);
 };

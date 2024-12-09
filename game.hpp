@@ -22,10 +22,10 @@ private:
     std::chrono::seconds interval;
     int genMax;
 public:
-    Game();
+    Game(GraphicsManager* gM);
     void setGenMax(int nb);
     void console();
-    void graphic(sf::RenderWindow* window);
+    void graphic();
     void display() const;
     void pause();
     bool loadFile(const std::string path);

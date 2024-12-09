@@ -21,6 +21,7 @@ public:
     Button(float x, float y, float width, float height, 
            sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor);
     void setScale(sf::Vector2f scaleFactor);
+    void setScale(float width, float height);
     void setPosition(float x, float y);
     void setSize(float width, float height);
     void setText(const std::string& text, sf::Font& font, unsigned int fontSize);
