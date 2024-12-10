@@ -78,6 +78,25 @@ void Game::graphic()
                         case sf::Keyboard::Space:
                             this->pause();
                             break;
+                        case sf::Keyboard::S:
+                            {
+                            std::ofstream outputFile("Grille_Generation_Enregistrement_Graphique_Numero_"+std::to_string(grid->getGenNumber())+"_out.txt");
+                            std::string intConcatenated;
+                            if (outputFile.is_open())
+                            {
+                                for(int line = 0; line < grid->getHeight(); line++)
+                                {
+                                    intConcatenated = "";
+                                    for (int nb : grid->getLine(line))
+                                    {
+                                        intConcatenated += std::to_string(nb) + " ";
+                                    }
+                                    outputFile << intConcatenated + "\n";
+                                }
+                            }
+                            outputFile.close();
+                            break;
+                            }
                         default:
                             break;
                     }

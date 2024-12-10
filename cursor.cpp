@@ -1,5 +1,3 @@
-#include <string>
-#include <iostream>
 #include "cursor.hpp"
 #include "game.hpp"
 

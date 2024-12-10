@@ -1,5 +1,4 @@
 #include "grid.hpp"
-#include <iostream>
 
 // Constructeur / Destructeur
 

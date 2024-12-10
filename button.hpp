@@ -1,6 +1,6 @@
 #ifndef BOUTONS_HPP
 #define BOUTONS_HPP
-
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>

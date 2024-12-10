@@ -1,7 +1,9 @@
 #ifndef CELL_HPP
 #define CELL_HPP
 #include "grid.hpp"
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class GraphicsManager;
 

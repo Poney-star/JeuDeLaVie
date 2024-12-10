@@ -1,8 +1,9 @@
 #ifndef GRID_H
 #define GRID_H
-
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 #include "cell.hpp"
+#include <iostream>
 #include "graphicsManager.hpp"
 
 class GraphicsManager;

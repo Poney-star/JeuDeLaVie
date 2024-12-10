@@ -225,10 +225,15 @@ void GraphicsManager::handleEvents()
             window.close();
             break;
         case sf::Event::Resized:
-            scaleFactor = sf::Vector2f(event.size.width / originalSize.x, event.size.height / originalSize.y);
             window.setView(sf::View(sf::FloatRect(0,0,event.size.width,event.size.height)));
+            sprites["menuBackground"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
+            textBoxes["path"].setScale(sf::Vector2f(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height));
+            textBoxes["genNumber"].setScale(sf::Vector2f(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height));
+            buttons["consoleButton"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
+            buttons["graphicButton"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
+            buttons["checkFile"].setScale(event.size.width/sprites["menuBackground"].getLocalBounds().width,event.size.height/sprites["menuBackground"].getLocalBounds().height);
             break;
-        case sf::Event::MouseMoved: 
+        case sf::Event::MouseMoved:
             cursor.updatePosition(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y);
             break;
         case sf::Event::KeyPressed:

@@ -1,5 +1,4 @@
 #include "cell.hpp"
-#include <iostream>
 
 //Constructeur
 

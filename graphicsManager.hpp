@@ -1,22 +1,23 @@
 #ifndef GRAPHICSMANAGER_HPP
 #define GRAPHICSMANAGER_HPP
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 #include "textBox.hpp"
 #include "cursor.hpp"
 #include "button.hpp"
-#include "cell.hpp"
 #include "game.hpp"
+#include "cell.hpp"
 #include <map>
 #include <chrono>
 #include <thread>
 #include <variant>
 #include <fstream>
 
+class Cursor;
 class Cell;
-
 class mutableCell;
-
 class constCell;
+class Game;
 
 class GraphicsManager
 {
@@ -57,5 +58,4 @@ public:
     bool loadAssets();
     void addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, Button*, mutableCell*, constCell*, Cell*> obj);
 };
-
 #endif

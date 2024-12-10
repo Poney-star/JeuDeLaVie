@@ -1,6 +1,7 @@
 #ifndef TEXTBOX_HPP
 #define TEXTBOX_HPP
 #include <string>
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 
 class TextBox{

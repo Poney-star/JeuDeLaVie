@@ -1,5 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
+#define SFML_STATIC
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "grid.hpp"
