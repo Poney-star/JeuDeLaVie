@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\a453c4ddabf54abc86558c44a40a3fa2\sfml-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\9503b44c79d5055b5cecd692c20807a7\sfml-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\f14422b9fca74f641d0e91d27c527d67\sfml-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\sfml-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E2AA2B95-B00B-33F2-B599-93526815F747}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

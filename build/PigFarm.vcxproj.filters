@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\cell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\cursor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\graphicsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\src\textBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\button.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\cell.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\cursor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\fonts.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\game.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\graphicsManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\grid.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\main.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\textBox.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\textures.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\include\icon.o">
+      <Filter>Object Files</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{FC720213-8AAE-316A-B9DF-263232F0DAB4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Files">
+      <UniqueIdentifier>{97612FA6-938F-35AB-A2B0-809ED03C5C9F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{25581A66-9305-3F66-A3FF-6A2504838E74}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

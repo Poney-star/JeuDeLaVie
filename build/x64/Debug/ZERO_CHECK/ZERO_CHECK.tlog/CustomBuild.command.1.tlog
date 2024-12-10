@@ -1,0 +1,10 @@
+^C:\USERS\MAARE\ONEDRIVE\BUREAU\TRAVAIL DE PORC\CACA\JEUDELAVIE\BUILD\CMAKEFILES\89C8B5AFECD5BDD2B1007C13483ABAC5\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie" "-BC:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/PigFarm.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

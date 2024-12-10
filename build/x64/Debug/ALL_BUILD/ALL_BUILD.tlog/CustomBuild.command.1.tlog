@@ -1,0 +1,10 @@
+^C:\USERS\MAARE\ONEDRIVE\BUREAU\TRAVAIL DE PORC\CACA\JEUDELAVIE\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie" "-BC:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build" --check-stamp-file "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

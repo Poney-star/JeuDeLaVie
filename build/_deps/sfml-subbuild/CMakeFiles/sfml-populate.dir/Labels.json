@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/sfml-populate"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/f14422b9fca74f641d0e91d27c527d67/sfml-populate.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/9503b44c79d5055b5cecd692c20807a7/sfml-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/maare/OneDrive/Bureau/Travail de Porc/Caca/JeuDeLaVie/build/_deps/sfml-subbuild/CMakeFiles/a453c4ddabf54abc86558c44a40a3fa2/sfml-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"sfml-populate"
+		],
+		"name" : "sfml-populate"
+	}
+}

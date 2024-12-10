@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -Wall -g
+CFLAGS = -Wall
 
 TARGET = app.exe
 
@@ -19,7 +19,7 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LIB)
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< $(LIB)
+	$(CC) $(CFLAGS) -c src/$< $(LIB)
 
 .PHONY: clean
 clean: 

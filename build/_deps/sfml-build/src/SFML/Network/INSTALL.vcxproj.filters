@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\CMakeFiles\bb5120099dc918eebb2c09949560cdd9\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{802C0787-27A0-3F8B-8FD4-717D3979304E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

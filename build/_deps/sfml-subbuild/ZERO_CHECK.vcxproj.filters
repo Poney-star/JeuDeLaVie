@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\maare\OneDrive\Bureau\Travail de Porc\Caca\JeuDeLaVie\build\_deps\sfml-subbuild\CMakeFiles\f14422b9fca74f641d0e91d27c527d67\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E2AA2B95-B00B-33F2-B599-93526815F747}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
