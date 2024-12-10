@@ -65,6 +65,14 @@ void Grid::nextGen(GraphicsManager* renderer)
 void Grid::invertValue(int x, int y, GraphicsManager* renderer)
 {
     elements[y * width + x]->invertValue(renderer);
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[(y - 1 < 0 ? height - 1 : y - 1 ) * width + (x - 1 < 0 ? width - 1 : x -  1)])) mCell->setNeighbours(getNeighbours((x - 1 < 0 ? width - 1 : x -  1), (y - 1 < 0 ? height - 1 : y - 1 )));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[y * width + (x - 1 < 0 ? width - 1 : x -  1)])) mCell->setNeighbours(getNeighbours((x - 1 < 0 ? width - 1 : x -  1), y));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[((y+1)%height) * width + (x - 1 < 0 ? width - 1 : x -  1)])) mCell->setNeighbours(getNeighbours((x - 1 < 0 ? width - 1 : x -  1), (y+1)%height));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[(y - 1 < 0 ? height - 1 : y - 1) * width + x])) mCell->setNeighbours(getNeighbours(x, (y - 1 < 0 ? height - 1 : y - 1)));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[((y+1)%height) * width + x])) mCell->setNeighbours(getNeighbours(x, (y+1)%height));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[(y - 1 < 0 ? height - 1: y - 1) * width + ((x+1)%width)])) mCell->setNeighbours(getNeighbours((x+1)%width, (y - 1 < 0 ? height - 1: y - 1)));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[y * width + ((x+1)%width)])) mCell->setNeighbours(getNeighbours((x+1)%width, y));
+    if (mutableCell* mCell = dynamic_cast<mutableCell*>(elements[((y+1)%height) * width + ((x+1)%width)])) mCell->setNeighbours(getNeighbours((x+1)%width, (y+1)%height));
 }
 
 // Méthode pour inverser l'état d'une cellule (vivant/mort)
@@ -107,7 +115,7 @@ void Grid::updateNeighbours()
         mutableCell* mCell = dynamic_cast<mutableCell*>(cell);
         if (mCell)
         {
-            mCell->setNeighbours(this->getNeighbours(mCell->getX(), mCell->getY()));
+            mCell->setNeighbours(getNeighbours(mCell->getX(), mCell->getY()));
         }
     }
 }

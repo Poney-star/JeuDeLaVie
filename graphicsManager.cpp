@@ -27,33 +27,33 @@ Cursor* GraphicsManager::getCursor()
 
 sf::Texture* GraphicsManager::getTexture(std::string str)
 {
-    return (textures.find(str) == textures.end())? &textures.at(str) : nullptr;
+    return (textures.find(str) != textures.end())? &textures.at(str) : nullptr;
 }
 
 
 sf::Sprite* GraphicsManager::getSprite(std::string str)
 {
-    return (sprites.find(str) == sprites.end())? &sprites.at(str) : nullptr;
+    return (sprites.find(str) != sprites.end())? &sprites.at(str) : nullptr;
 }
 
 sf::Font* GraphicsManager::getFont(std::string str)
 {
-    return(fonts.find(str) == fonts.end())? &fonts.at(str) : nullptr;
+    return(fonts.find(str) != fonts.end())? &fonts.at(str) : nullptr;
 }
 
 sf::Text* GraphicsManager::getText(std::string str)
 {
-    return(texts.find(str) == texts.end())? &texts.at(str) : nullptr;
+    return(texts.find(str) != texts.end())? &texts.at(str) : nullptr;
 }
 
 Button* GraphicsManager::getButton(std::string str)
 {
-    return(buttons.find(str) == buttons.end())? &buttons.at(str) : nullptr;
+    return(buttons.find(str) != buttons.end())? &buttons.at(str) : nullptr;
 }
 
 TextBox* GraphicsManager::getTextBox(std::string str)
 {
-    return(textBoxes.find(str) == textBoxes.end())? &textBoxes.at(str) : nullptr;
+    return(textBoxes.find(str) != textBoxes.end())? &textBoxes.at(str) : nullptr;
 }
 
 //Méthodes
@@ -405,7 +405,7 @@ void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, 
 
 void GraphicsManager::displayGameCells(int width, int height)
 {
-    sf::Vector2f cellScale(window.getSize().x/(width * sprites["menuBackground"].getGlobalBounds().width), window.getSize().y/(height * sprites["menuBackground"].getGlobalBounds().height));
+    sf::Vector2f cellScale(window.getSize().x/(width * sprites["deadCell"].getLocalBounds().width), window.getSize().y/(height * sprites["deadCell"].getLocalBounds().height));
     sf::Sprite * sprite;
     while (!toCheck.empty()) 
     {

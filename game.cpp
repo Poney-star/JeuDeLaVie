@@ -91,8 +91,9 @@ void Game::graphic()
         {
             if (grid->getGenNumber() == 0) renderAllCells();
             grid->nextGen(renderer);
-            renderer->displayGameCells(grid->getWidth(), grid->getHeight());
             start = timer;
+        } else {
+            renderer->displayGameCells(grid->getWidth(), grid->getHeight());
         }
     }
 }
@@ -104,8 +105,9 @@ void Game::pause()
 
 void Game::invertCell(sf::Vector2i coordinates) const
 {
-    sf::FloatRect shapeBounds = renderer->getSprite("deadCell")->getGlobalBounds();
-    grid->invertValue(floor(coordinates.x / shapeBounds.width),floor(coordinates.y / shapeBounds.height), renderer);
+    float shapeWidth = renderer->getSprite("deadCell")->getGlobalBounds().width;
+    float shapeHeight = renderer->getSprite("deadCell")->getGlobalBounds().height;
+    grid->invertValue(floor(coordinates.x / shapeWidth),floor(coordinates.y / shapeHeight), renderer);
 }
 
 bool Game::loadFile(const std::string filename){
