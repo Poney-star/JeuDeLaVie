@@ -69,7 +69,6 @@ bool GraphicsManager::loadAssets()
 
     //Sprites
     sprites["menuBackground"].setTexture(textures["menuBackground"]);
-    sprites["menuBackground"].setScale(1,1);
     sprites["aliveCell"].setTexture(textures["aliveCell"]);
     sprites["deadCell"].setTexture(textures["deadCell"]);
     sprites["constAliveCell"].setTexture(textures["constAliveCell"]);
@@ -211,6 +210,7 @@ void GraphicsManager::buttonActivatedSFAMMenu(sf::Vector2i mousePos)
 void GraphicsManager::renderGame(Game* game)
 {
     toCheck = {};
+    window.clear();
     game->graphic();
 }
 
@@ -403,20 +403,25 @@ void GraphicsManager::addToCheck(std::variant<sf::Sprite*, sf::Text*, TextBox*, 
     toCheck.push_back(obj);
 }
 
-void GraphicsManager::displayGameCells(Grid* grid)
+void GraphicsManager::displayGameCells(int width, int height)
 {
-    std::vector<Cell*> cells = grid->getElements();
-    sf::Vector2f cellSize(window.getSize().x/grid->getWidth(), window.getSize().y/grid->getHeight());
-
-    for(int x = 0; x < cells.size();x++)
+    sf::Vector2f cellScale(window.getSize().x/(width * sprites["menuBackground"].getGlobalBounds().width), window.getSize().y/(height * sprites["menuBackground"].getGlobalBounds().height));
+    sf::Sprite * sprite;
+    while (!toCheck.empty()) 
     {
-        sf::RectangleShape rectangle(cellSize);
-        std::cout<<(x % grid->getWidth()) * cellSize.x << ", " << floor(x/grid->getWidth()) * cellSize.y << std::endl;
-        rectangle.setPosition((x % grid->getWidth()) * cellSize.x, floor(x/grid->getWidth()) * cellSize.y);
-        rectangle.setFillColor(cells[x]->getValue() ? sf::Color::White : sf::Color::Green);
-        rectangle.setOutlineColor(sf::Color::White);
-        rectangle.setOutlineThickness(2);
-        window.draw(rectangle);
+        auto& cell = std::get<Cell*>(toCheck.back());
+        if (typeid(*cell) == typeid(mutableCell))
+        {
+            sprite = (cell->getValue())? &sprites["aliveCell"] : &sprites["deadCell"];
+            sprite->setPosition(cell->getX() * sprite->getGlobalBounds().width, cell->getY() * sprite->getGlobalBounds().height);
+        } else if (typeid(*cell) == typeid(constCell))
+        {
+            sprite = (cell->getValue())? &sprites["constAliveCell"] : &sprites["constDeadCell"];
+            sprite->setPosition(cell->getX() * sprite->getGlobalBounds().width, cell->getY() * sprite->getGlobalBounds().height);
+        }
+        sprite->setScale(cellScale);
+        window.draw(*sprite);
+        toCheck.pop_back();
     }
     window.display();
 }

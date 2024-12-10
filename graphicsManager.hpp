@@ -49,7 +49,7 @@ public:
     void renderSFAMMenu(); //render SFAM (Select File And Mode) Menu
     void renderGame(Game* game);
     void display();
-    void displayGameCells(Grid* grid);
+    void displayGameCells(int width, int height);
     // Autres
     void handleEvents();
     void buttonActivatedMenu(sf::Vector2i);

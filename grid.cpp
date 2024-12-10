@@ -38,13 +38,24 @@ int Grid::getNeighbours(int x, int y) {
     return neighbours;
 }
 
-// Méthode pour calculer l'itération suivante
 void Grid::nextGen()
 {
     for (Cell* cell : elements) {
         mutableCell* mCell = dynamic_cast<mutableCell*>(cell);
         if (mCell) {
-            cell->update(this);
+            cell->update();
+        }
+    }
+    updateNeighbours();
+    ++genNumber;
+}
+
+void Grid::nextGen(GraphicsManager* renderer)
+{
+    for (Cell* cell : elements) {
+        mutableCell* mCell = dynamic_cast<mutableCell*>(cell);
+        if (mCell) {
+            cell->update(renderer);
         }
     }
     updateNeighbours();
@@ -53,8 +64,7 @@ void Grid::nextGen()
 
 void Grid::invertValue(int x, int y, GraphicsManager* renderer)
 {
-    elements[y * width + x]->invertValue();
-    renderer->addToCheck(elements[y * (width - 1) + x]);
+    elements[y * width + x]->invertValue(renderer);
 }
 
 // Méthode pour inverser l'état d'une cellule (vivant/mort)
@@ -117,5 +127,13 @@ void Grid::addLine(std::vector<Cell*> line, GraphicsManager* renderer)
     for(Cell* cell : line)
     {
         elements.push_back(cell);
+    }
+}
+
+void Grid::renderAllCells(GraphicsManager* renderer)
+{
+    for(Cell* cell : elements)
+    {
+        renderer->addToCheck(cell);
     }
 }

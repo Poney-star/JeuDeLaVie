@@ -1,12 +1,18 @@
 #include "game.hpp"
 
-Game::Game(GraphicsManager* gM)
+Game::Game(GraphicsManager* gM):
+renderer(gM),
+grid(new Grid(0,0)),
+interval(std::chrono::seconds(1)),
+running(1),
+genMax(5)
+{}
+
+Game::~Game()
 {
-    renderer = gM;
-    grid = new Grid(0,0);
-    interval = std::chrono::seconds(1);
-    running = true;
+    grid->~Grid();
 }
+
 void Game::setGenMax(int nb)
 {
     genMax = nb;
@@ -54,6 +60,8 @@ void Game::graphic()
                     renderer->getWindow()->close();
                     break;
                 case sf::Event::Resized:
+                    renderAllCells();
+                    renderer->getWindow()->setView(sf::View(sf::FloatRect(0,0,event.size.width,event.size.height)));
                     break;
                 case sf::Event::MouseButtonPressed:
                     renderer->getCursor()->clicOnCell(&event, this);
@@ -81,8 +89,9 @@ void Game::graphic()
         std::chrono::system_clock::time_point timer = std::chrono::system_clock::now();
         if (running && timer - start >= interval)
         {
-            grid->nextGen();
-            renderer->displayGameCells(grid);
+            if (grid->getGenNumber() == 0) renderAllCells();
+            grid->nextGen(renderer);
+            renderer->displayGameCells(grid->getWidth(), grid->getHeight());
             start = timer;
         }
     }
@@ -95,7 +104,7 @@ void Game::pause()
 
 void Game::invertCell(sf::Vector2i coordinates) const
 {
-    sf::FloatRect shapeBounds = renderer->getSprite("aliveCell")->getGlobalBounds();
+    sf::FloatRect shapeBounds = renderer->getSprite("deadCell")->getGlobalBounds();
     grid->invertValue(floor(coordinates.x / shapeBounds.width),floor(coordinates.y / shapeBounds.height), renderer);
 }
 
@@ -190,4 +199,9 @@ std::vector<Cell*> Game::resizeLine(unsigned int width, std::vector<Cell*> row,u
         }
     }
     return row;
+}
+
+void Game::renderAllCells()
+{
+    grid->renderAllCells(renderer);
 }

@@ -23,6 +23,7 @@ private:
     int genMax;
 public:
     Game(GraphicsManager* gM);
+    ~Game();
     void setGenMax(int nb);
     void console();
     void graphic();
@@ -32,6 +33,7 @@ public:
     std::vector<Cell*> resizeLine(unsigned int width, std::vector<Cell*> row,unsigned int x ,unsigned int y) const;
     void invertCell(sf::Vector2i coordinates) const;
     void setConstantCell(sf::Vector2i coordinates) const;
+    void renderAllCells();
 };
 
 #endif

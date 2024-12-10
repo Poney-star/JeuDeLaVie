@@ -27,9 +27,11 @@ public:
     void addLine(std::vector<Cell*>, GraphicsManager* renderer);
     int getNeighbours(int x, int y);
     void nextGen();
+    void nextGen(GraphicsManager* renderer);
     void invertConst(int x, int y, GraphicsManager* renderer);
     void invertValue(int x, int y, GraphicsManager* renderer);
     std::vector<int> getLine(int lineNumber);
+    void renderAllCells(GraphicsManager* renderer);
 
     // Accesseur pour la itération actuelle
     int getGenNumber() const;

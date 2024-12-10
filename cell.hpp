@@ -3,6 +3,8 @@
 #include "grid.hpp"
 #include <SFML/Graphics.hpp>
 
+class GraphicsManager;
+
 class Grid;
 
 class Cell
@@ -10,9 +12,11 @@ class Cell
 public:
     Cell();
     virtual ~Cell();
-    virtual void update(Grid *grid) = 0;
+    virtual void update(GraphicsManager* renderer) = 0;
+    virtual void update() = 0;
     int getX() const, getY() const;
     bool getValue() const;
+    void invertValue(GraphicsManager* renderer);
     void invertValue();
 protected:
     bool value;
@@ -27,7 +31,8 @@ public:
     mutableCell(int x, int y, bool value);
     ~mutableCell();
     void setNeighbours(int aliveNeighbours);
-    void update(Grid *grid) override;
+    void update(GraphicsManager* renderer) override;
+    void update() override;
 };
 
 class constCell : public Cell 
@@ -35,7 +40,8 @@ class constCell : public Cell
 public:
     constCell(int x, int y, bool value);
     ~constCell();
-    void update(Grid *grid) override;
+    void update(GraphicsManager* renderer) override;
+    void update() override;
 };
 
 #endif
